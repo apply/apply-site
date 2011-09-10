@@ -34,7 +34,7 @@ server.get('/blobs/{id}/view', render('./views/blobs/view.jade'));
 
 // blob view
 server.get('/blobs/{id}', echo);
-server.get('/blobs/{blob}/grid', echo);
+server.get('/blobs/{blob}/grid', render('./views/blobs/grid.jade'));
 server.get('/blobs/{blob}/tabular', render('./views/blobs/tabular.jade'));
 server.get('/blobs/{blob}/map', echo);
 server.get('/blobs/{blob}/gallery', echo);
