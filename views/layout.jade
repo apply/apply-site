@@ -1,0 +1,30 @@
+!!! 5
+html
+  head
+    link(href='http://fonts.googleapis.com/css?family=Raleway:100', rel='stylesheet', type='text/css')
+    title= 'Apply.io - ' + self.title || ''
+
+    -if(self.css)
+      -each file in self.css
+        link(rel= 'stylesheet', href= '/css/' + file + '.css' )
+  body
+    #wrapper
+      #sticky
+        nav
+          a#logo(href= '/') Apply.io
+        .clearer
+
+        #content
+          != self.body
+
+    #footer
+      p
+        = "Apply.io - 2011"
+        = " &raquo; "
+        a(href='/about_us') About us
+        = " &raquo; "
+        a(href='/contact_us') Contact us
+
+  -if (self.js)
+    -each file in self.js
+      script(src= '/javascripts/' + file + '.js')

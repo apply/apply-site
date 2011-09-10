@@ -1,0 +1,21 @@
+pressed()
+  background: $p_light
+  color: $p_dark
+  text-shadow:0px 1px 0px #fff
+  box-shadow: 1px 1px 0px #fff, -1px -1px 0px $p_medium
+
+rounded($radius = 3px)
+  -webkit-border-radius: $radius
+  -moz-border-radius: $radius
+  border-radius: $radius
+
+ir()
+  display:block
+  text-indent:-999px
+  overflow:hidden
+  background-repeat: none
+
+box-shadow()
+  -moz-box-shadow: arguments
+  -webkit-box-shadow: arguments
+  box-shadow: arguments
