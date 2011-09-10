@@ -34,16 +34,16 @@ server.get('/blobs/create', render('./views/blobs/create.jade',{types: types}));
 server.get('/blobs/{id}/view', render('./views/blobs/view.jade'));
 
 // blob view
-server.get('/blobs/{id}', echo);
-server.get('/blobs/{blob}/grid', render('./views/blobs/grid.jade'));
-server.get('/blobs/{blob}/tabular', render('./views/blobs/tabular.jade'));
-server.get('/blobs/{blob}/map', render('./views/blobs/map.jade'));
-server.get('/blobs/{blob}/gallery', render('./views/blobs/gallery.jade'));
+server.get('/blobs/{blob_id}', echo);
+server.get('/blobs/{blob_id}/grid', render('./views/blobs/grid.jade'));
+server.get('/blobs/{blob_id}/tabular', render('./views/blobs/tabular.jade'));
+server.get('/blobs/{blob_id}/map', render('./views/blobs/map.jade'));
+server.get('/blobs/{blob_id}/gallery', render('./views/blobs/gallery.jade'));
 
 // items
-server.get('/blobs/{blob}/items/create', echo);
-server.get('/items/{item}', echo);
-server.get('/items/{item}/edit', echo);
+server.get('/blobs/{blob_id}/items/create', echo);
+server.get('/blobs/{blob_id}/items/{item_id}', render('./views/blobs/items/show.jade'));
+server.get('/blobs/{blob_id}/items/{item_id}/edit', echo);
 
 api.listen(server);
 

@@ -1,0 +1,8 @@
+- // HARDCODED
+- var item = {_id: 1, fields: [{name: 'Name', value: 'Pau Ramon', type: 'short_text'}, {name: 'Avatar', value: '/images/default_picture.png', type: 'picture'}]}
+- var title = 'Pau Ramon'
+
+h1= title
+
+- each field in item.fields
+  != self.renderField(field)
