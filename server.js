@@ -16,7 +16,7 @@ var echo = function(request, response) {
 
 function render(location, locals) {
   return function (request, response) {
-    locals = locals || {};
+    locals = common.join(locals, require('./helpers/static')) || {};
     require('fs').readFile(common.format(location, request.params), 'utf-8', function (error, src) {
       locals.body = require('jade').compile(src, {self: true})(locals);
       bark.jade('./views/layout.jade', locals)(request, response);
@@ -35,7 +35,7 @@ server.get('/blobs/{id}/view', render('./views/blobs/view.jade'));
 // blob view
 server.get('/blobs/{id}', echo);
 server.get('/blobs/{blob}/grid', echo);
-server.get('/blobs/{blob}/tabular', echo);
+server.get('/blobs/{blob}/tabular', render('./views/blobs/tabular.jade'));
 server.get('/blobs/{blob}/map', echo);
 server.get('/blobs/{blob}/gallery', echo);
 

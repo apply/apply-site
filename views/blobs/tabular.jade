@@ -12,6 +12,7 @@ table
         = type.toLowerCase()
         a.arrow(href= '#')
 
-  - each visualization in visualizations
+  - each item in items
     tr
-      td= visualization
+      - each type in types
+        td= self.getField(item, type).value
