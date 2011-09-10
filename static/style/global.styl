@@ -1,0 +1,68 @@
+@import "reset"
+@import "variables"
+@import "mixins"
+
+body
+  font-family: Helvetica, Arial, sans-serif
+  font-size: 11pt
+  color: $p_darkest
+  background: $p_lightest url(/images/bg.jpg) repeat top left
+
+h1
+  font-size: 32pt
+  margin: 0px 0px 50px
+  color: $p_medium
+  height: 40px
+
+h2
+  font-size: 18pt
+  font-weight: 400
+  color: $p_dark
+  text-shadow: 0px 1px 0px #fff
+  margin-bottom: 20px
+
+h3
+  font-size: 14pt
+  font-weight: 400
+  color: $p_dark
+  margin-bottom: 20px
+
+a
+  color: $link
+  text-decoration: none
+
+  &:hover
+    text-decoration: underline
+
+p
+  margin-bottom: 10px
+
+dl
+  width: $fieldset-width
+  margin-bottom: 10px
+
+  dt, dd
+    padding: 5px
+    margin: 5px 0
+    vertical-align: top
+    display: inline-block
+
+  dt
+    width: 140px
+    background: darken($p_lightest, 6)
+    margin-right: 10px
+
+  dd
+    width: 320px
+    font-size: 10pt
+
+.floated
+  float:left
+
+.clearer
+  clear: both
+
+// @import "layout"
+// @import "forms"
+// @import "boxes"
+// @import "elements"

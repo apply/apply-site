@@ -1,0 +1,22 @@
+- // HARDCODED
+- var blob = {_id: 12}
+- var canUseVisualization = function () {return true;}
+
+h1
+  span Definition
+  span.active &raquo; Visualization
+
+.box.warning Choose a template to represent your blob
+
+form(href= '/api/blobs/' + blob_id + '/view', method= 'POST')
+
+  - // HARDCODED
+  - var types = ['grid', 'tabular', 'map', 'gallery']
+
+  fieldset.types_from(class= canUseVisualization ? 'enabled' : 'disabled')
+    - each visualization in visualizations
+      a(href='#', class= type)
+        img(src= '/static/images/visualizations/' + visualization, alt= visualization)
+        = type.replace('_', ' ').replace(/^\w/, function($0) { return $0.toUpperCase(); })
+
+      input(type= 'submit', value= 'Choose')
