@@ -8,6 +8,7 @@ var types = ['short_text', 'rich_text', 'date', 'duration', 'number', 'picture',
 
 server.get('/css/*.css', bark.stylus('./static/style/{*}.styl'));
 server.get('/js/*', bark.rex('./static/js/*'));
+server.get('/images/*', bark.file('./static/images/{*}'));
 
 var echo = function(request, response) {
   response.writeHead(200);
