@@ -13,11 +13,8 @@ form(href= '', method= 'POST')
       label(for= 'blob_item_name')
         input(type= 'text', name='blob[item_name]', id= 'blob_item_name', placeholder= 'Person, Event, Disc ...')
 
-  - // HARDCODED
-  - var types = ['short_text', 'rich_text', 'date', 'duration', 'number', 'picture', 'file', 'location', 'multiple_choice', 'single_choice', 'link']
-
   fieldset.types_from
-    - each type in types
+    - each type in self.types
       a(href='#', class= type)
         img(src= '/static/images/types/' + type, alt= type)
         = type.replace('_', ' ').replace(/^\w/, function($0) { return $0.toUpperCase(); })
@@ -25,7 +22,7 @@ form(href= '', method= 'POST')
   fieldset.types_to
     .type
       .drag
-        img(src= '' + type, alt= '')
+        img(src= '', alt= '')
         span.value
         input.value(type= 'text', name= '')
 

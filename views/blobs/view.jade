@@ -8,15 +8,15 @@ h1
 
 .box.warning Choose a template to represent your blob
 
-form(href= '/api/blobs/' + blob_id + '/view', method= 'POST')
+form(href= '/api/blobs/' + blob._id + '/view', method= 'POST')
 
   - // HARDCODED
-  - var types = ['grid', 'tabular', 'map', 'gallery']
+  - var visualizations = ['grid', 'tabular', 'map', 'gallery']
 
   fieldset.types_from(class= canUseVisualization ? 'enabled' : 'disabled')
     - each visualization in visualizations
-      a(href='#', class= type)
+      a(href='#', class= visualizations)
         img(src= '/static/images/visualizations/' + visualization, alt= visualization)
-        = type.replace('_', ' ').replace(/^\w/, function($0) { return $0.toUpperCase(); })
+        = visualization.replace('_', ' ').replace(/^\w/, function($0) { return $0.toUpperCase(); })
 
       input(type= 'submit', value= 'Choose')

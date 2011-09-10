@@ -4,22 +4,33 @@ var bark = require('bark');
 var common = require('common');
 
 var noop = function() {};
+var types = ['short_text', 'rich_text', 'date', 'duration', 'number', 'picture', 'file', 'location', 'multiple_choice', 'single_choice', 'link'];
 
 server.get('/css/*.css', bark.stylus('./static/style/{*}.styl'));
 server.get('/js/*', bark.rex('./static/js/*'));
 
 var echo = function(request, response) {
-	response.writeHead(200);
-	response.end(JSON.stringify({url:request.url, params:request.params}));
+  response.writeHead(200);
+  response.end(JSON.stringify({url:request.url, params:request.params}));
 };
 
-server.get('/', echo);
+function render(location, locals) {
+  return function (request, response) {
+    locals = locals || {};
+    require('fs').readFile(common.format(location, request.params), 'utf-8', function (error, src) {
+      locals.body = require('jade').compile(src, {self: true})(locals);
+      bark.jade('./views/layout.jade', locals)(request, response);
+    });
+  }
+}
+
+server.get('/', render('./views/index.jade'));
 
 // create blob
-server.get('/blobs/create', echo);
+server.get('/blobs/create', render('./views/blobs/create.jade',{types: types}));
 
 // select view
-server.get('/blobs/{id}/view', echo);
+server.get('/blobs/{id}/view', render('./views/blobs/view.jade'));
 
 // blob view
 server.get('/blobs/{id}', echo);
