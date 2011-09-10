@@ -1,12 +1,19 @@
 - // HARDCODED
 - var blob = {_id: 12, name: 'People'}
-- var types = ['Name', 'Description']
+- var types = ['Name', 'Credits', 'Hackaton hours']
 - var items = [{_id: 1, fields: [{name: 'Name', value: 'Pau Ramon', type: 'short_text'}, {name: 'Credits', value: 42, type: 'number'}, {name: 'Hackaton hours', value: 36000, type: 'duration'}]}]
 
 h1= blob.name
 
-ul.grid
+table
+  - each type in types
+    tr
+      th
+        = type.toLowerCase()
+        a.arrow(href= '#')
+
   - each item in items
-    li
-    - each type in types
-      div(class= type)= self.getField(item, type).value
+    tr
+      - each type in types
+        td= self.getField(item, type).value
+
