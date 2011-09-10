@@ -1,6 +1,6 @@
 var server = require('router').create();
+var api = require('./api-server');
 var bark = require('bark');
-var db = require('mongojs').connect('mongodb://root:root@staff.mongohq.com:10041/apply', ['types']);
 var common = require('common');
 
 var noop = function() {};
@@ -44,18 +44,6 @@ server.get('/blobs/{blob}/items/create', echo);
 server.get('/items/{item}', echo);
 server.get('/items/{item}/edit', echo);
 
-// api
-
-// blob create
-server.post('/api/blobs', echo);
-server.post('/api/blobs/{blob}/view', echo);
-
-// blob view
-server.get('/api/blobs/{blob}', echo);
-server.get('/api/blobs/{blob}/items', echo);
-
-// items
-server.post('/api/blobs/{blob}/items', echo);
-server.get('/api/blobs/{blob}/items/{item}', echo);
+api.listen(server);
 
 server.listen(8888);
