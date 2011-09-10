@@ -36,8 +36,8 @@ server.get('/blobs/{id}/view', render('./views/blobs/view.jade'));
 server.get('/blobs/{id}', echo);
 server.get('/blobs/{blob}/grid', render('./views/blobs/grid.jade'));
 server.get('/blobs/{blob}/tabular', render('./views/blobs/tabular.jade'));
-server.get('/blobs/{blob}/map', echo);
-server.get('/blobs/{blob}/gallery', echo);
+server.get('/blobs/{blob}/map', render('./views/blobs/map.jade'));
+server.get('/blobs/{blob}/gallery', render('./views/blobs/gallery.jade'));
 
 // items
 server.get('/blobs/{blob}/items/create', echo);

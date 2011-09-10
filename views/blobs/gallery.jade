@@ -1,0 +1,12 @@
+- // HARDCODED
+- var blob = {_id: 12, name: 'People'}
+- var types = ['Name', 'Avatar']
+- var items = [{_id: 1, fields: [{name: 'Name', value: 'Pau Ramon', type: 'short_text'}, {name: 'Avatar', value: '/images/default_picture.png', type: 'image'}]}]
+
+h1= blob.name
+
+ul
+  - each item in items
+    li
+      img(src= self.getField(item, types[1]).value, alt= self.getField(item, types[0]).value)
+      div.title= self.getField(item, types[0]).value
