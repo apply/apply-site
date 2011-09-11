@@ -77,7 +77,7 @@ $(function() {
   var mapDiv = document.getElementById('map-canvas');
   var map = new google.maps.Map(mapDiv, {
     center: new google.maps.LatLng(37.77199, -122.40366),
-    zoom: 9,
+    zoom: 14,
     mapTypeId: google.maps.MapTypeId.TERRAIN
   });
   var markers = [];

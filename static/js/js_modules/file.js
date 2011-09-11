@@ -36,7 +36,7 @@ module.exports = function(selector, map) {
 				iframe.remove();
 			}, 500);
 
-			map.upload(url, filename);
+			map.upload(url + ((/\.(png)|(jpeg)|(jpg)|(gif)/i).test(filename) ? '?width=900' : ''), filename);
 		});
 	});
 };
