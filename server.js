@@ -59,19 +59,19 @@ function renderItem(location) {
 		});
 	}
 }
-server.get('/', render('./views/index.jade'));
+server.get('/', render('./views/index.jade', {css: ['index']}));
 
 // create blob
-server.get('/blobs/create', render('./views/blobs/create.jade',{types: types}));
+server.get('/blobs/create', render('./views/blobs/create.jade',{types: types, css: ['blobs/create']}));
 
 // select view
 server.get('/blobs/{id}/view', render('./views/blobs/view.jade'));
 
 // blob view
-server.get('/blobs/{blob}', function(request, reponse) {
+server.get('/blobs/{blob_id}', function(request, reponse) {
 	common.step([
 		function(next) {
-			curly.get('localhost:' + port + '/api/blobs/{blob}/view').json(next);
+			curly.get('localhost:' + port + '/api/blobs/{blob_id}/view').json(next);
 		},
 		function(blob) {
 			renderView('./views/blobs/' + blob.view + '.jade');
@@ -86,9 +86,9 @@ server.get('/blobs/{blob}/map', renderView('./views/blobs/map.jade'));
 server.get('/blobs/{blob}/gallery', renderView('./views/blobs/gallery.jade'));
 
 // items
-server.get('/blobs/{blob}/items/create', render('./views/items/create.jade'));
-server.get('/items/{item}', renderItem('./view/items/item.jade'));
-server.get('/items/{item}/edit', renderItem('./view/items/edit.jade'));
+server.get('/blobs/{blob_id}/items/create', render('./views/blobs/items/create.jade'));
+server.get('/blobs/{blob_id}/items/{item_id}', render('./views/blobs/items/show.jade'));
+server.get('/blobs/{blob_id}/items/{item_id}/edit', render('./views/blobs/items/edit.jade'));
 
 api.listen(server);
 

@@ -7,23 +7,26 @@ h1
 form(href= '', method= 'POST')
   fieldset.general
     .field
-      label(for= 'blob_name')
-        input(type= 'text', name='blob[name]', id= 'blob_name', placeholder= 'People, Events, Jazz records ...')
+      label(for= 'blob_name') Blob name
+      input(type= 'text', name='blob[name]', id= 'blob_name', placeholder= 'People, Events, Jazz records ...')
     .field
-      label(for= 'blob_item_name')
-        input(type= 'text', name='blob[item_name]', id= 'blob_item_name', placeholder= 'Person, Event, Disc ...')
+      label(for= 'blob_item_name') Item name
+      input(type= 'text', name='blob[item_name]', id= 'blob_item_name', placeholder= 'Person, Event, Disc ...')
+    .clearer
 
   fieldset.types_from
     - each type in self.types
       a(href='#', class= type)
-        img(src= '/static/images/types/' + type, alt= type)
+        img(src= '/images/types/' + type + '.png', alt= type)
         = type.replace('_', ' ').replace(/^\w/, function($0) { return $0.toUpperCase(); })
 
   fieldset.types_to
-    .type
-      .drag
-        img(src= '', alt= '')
+    ul
+      li.type
+        img.drag(src= '/images/drag.png', alt= 'drag')
+        img.type(src= '/images/types/short_text.png', alt= 'Short text')
         span.value
         input.value(type= 'text', name= '')
+    input.submit(type= 'submit', value= 'Next')
+  .clearer
 
-  input(type= 'submit', value= 'Next')

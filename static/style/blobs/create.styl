@@ -1,0 +1,62 @@
+@import "./static/style/variables"
+@import "./static/style/mixins"
+
+fieldset.general
+  .field
+    float: left
+    margin-right: 20px
+
+fieldset.types_from
+  width: 275px
+  float: left
+
+  a
+    display: block
+    border-left: 4px solid $s_medium
+    padding: 10px 10px 10px 15px
+    margin-bottom: 4px
+    vertical-align: middle
+    font-size: 14pt
+
+    &:hover
+      background: url(/images/button_arrow.png) no-repeat top left
+      color: #fff
+      text-decoration: none
+      border: none
+      padding-left: 19px
+      text-shadow: -1px -1px 0px darken($s_medium, 8)
+
+    img
+      vertical-align: middle
+      margin-right: 20px
+
+fieldset.types_to
+  float: left
+
+  li.type
+      padding: 5px
+      background: $p_lightest
+      width: 675px
+      vertical-align: middle
+
+      img.drag
+        vertical-align: middle
+        margin-right: 20px
+
+      img.type
+        vertical-align: middle
+        margin-right: 10px
+        opacity: 0.3
+
+  input.submit
+    float: right
+    margin-top: 20px
+    background: transparent url(/images/big_button_arrow.png) no-repeat top left
+    border: none
+    width: 252px
+    padding-right: 30px
+    height: 67px
+    box-shadow: none
+    font-size: 18pt
+    color: #fff
+    text-shadow: -1px -1px 0px darken($s_medium, 8)

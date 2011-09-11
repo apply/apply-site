@@ -1,0 +1,9 @@
+- // HARDCODED
+- var item = {_id: 1, fields: [{name: 'Name', value: 'Pau Ramon', type: 'short_text'}, {name: 'Avatar', value: '/images/default_picture.png', type: 'picture'}], blob: {_id: 13}}
+- var title = 'Pau Ramon'
+
+h1= title
+a.button(href= '/blobs/' + item.blob._id + '/items/' + item._id + '/edit') Edit
+
+- each field in item.fields
+  != self.renderField(field)
