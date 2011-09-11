@@ -14,6 +14,6 @@ a.button.create(href= '/blobs/' + self.blob.id + '/items/create') Create a #{sel
       li(class= i % 5 === 0 ? 'first' : '')
         a(href= '/items/' + item.id)
           = self.truncate(fields[0].value, 30)
-        p= self.truncate(fields[1].value, 120)
+        p= self.truncate(fields[1] ? fields[1].value : '', 120)
 - else
   .box.warning This blob doesn't contain any #{self.blob.itemName}
