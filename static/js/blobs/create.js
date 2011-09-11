@@ -1,5 +1,4 @@
-var $ = require('jQuery');
-require('jquery-ui');
+var $ = require('jQuery', 'jquery-ui');
 
 $(function () {
 
@@ -7,6 +6,31 @@ $(function () {
     $(this).parent().remove();
     return false;
   }
+
+ $('#creator').submit(function() {
+    var post = {types:[]};
+
+    post.name = $('#blob_name').val();
+    post.itemName = $('#blob_item_name').val();
+
+    $(this).find('fieldset.types_to li.type').each(function(i, el) {
+      post.types.push({
+        name: $(el).find('input.value').val(),
+        type: $(el).find('input.type').val()
+      });
+    });
+
+    $.ajax({
+      type:'POST',
+      url:'/api/blobs',
+      data:JSON.stringify(post),
+      dataType:'json',
+      success:function(blob) {
+        window.location = '/blobs/'+blob.id;
+      }
+    });
+    return false;
+  });
 
   $('fieldset.types_to ul').sortable({handle: 'img.drag', opacity: 0.8});
 
