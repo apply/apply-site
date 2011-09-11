@@ -2,10 +2,10 @@ var server = require('router').create();
 var api = require('./api-server');
 var bark = require('bark');
 var common = require('common');
-
+var curly = require('curly');
 
 var noop = function() {};
-var apihost = 'localhost';
+var port = 8888;
 var types = ['short_text', 'rich_text', 'date', 'duration', 'number', 'picture', 'file', 'location', 'multiple_choice', 'single_choice', 'link'];
 
 server.get('/css/*.css', bark.stylus('./static/style/{*}.styl'));
@@ -68,13 +68,13 @@ server.get('/blobs/create', render('./views/blobs/create.jade',{types: types}));
 server.get('/blobs/{id}/view', render('./views/blobs/view.jade'));
 
 // blob view
-server.get('/blobs/{blob_id}', function(request, reponse) {
+server.get('/blobs/{blob}', function(request, response) {
 	common.step([
 		function(next) {
-			curly.get('localhost:' + port + '/api/blobs/{blob_id}/view').json(next);
+			curly.get('localhost:' + port + '/api/blobs/{blob}/view', request.params).json(next);
 		},
 		function(blob) {
-			renderView('./views/blobs/' + blob.view + '.jade');
+			renderView('./views/blobs/' + blob.view + '.jade')(request, response);
 		}
 	], function(err) {
 		bark.jade('./jade/404.jade')(request, response);
@@ -87,8 +87,8 @@ server.get('/blobs/{blob}/gallery', renderView('./views/blobs/gallery.jade'));
 
 // items
 server.get('/blobs/{blob_id}/items/create', render('./views/blobs/items/create.jade'));
-server.get('/blobs/{blob_id}/items/{item_id}', render('./views/blobs/items/show.jade'));
-server.get('/blobs/{blob_id}/items/{item_id}/edit', render('./views/blobs/items/edit.jade'));
+server.get('/items/{item_id}', renderItem('./views/blobs/items/show.jade'));
+server.get('/items/{item_id}/edit', renderItem('./views/blobs/items/edit.jade'));
 
 api.listen(server);
 
