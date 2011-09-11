@@ -14,7 +14,7 @@ a.button.create(href= '/blobs/' + self.blob.id + '/items/create') Create a #{sel
         - each field in fields
           th
             = field.name.toLowerCase()
-            a.arrow(href= '#')
+            span.arrow(href= '#')
 
     tbody
       - each item in self.items
