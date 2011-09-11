@@ -54,15 +54,13 @@ var filterFields = function (item, types) {
   }, []);
 };
 
-var markupField = function(fields) {
-  [ { "name": "Location", "type": "location", "value": { "lat": 37.993898, "lng": -122.320799 } }, { "name": "Name", "type": "short_text", "value": "Harbour Way Elementary Community Day School" } ]
-
-  var markup = '';  
+var markupField = function(fields, item) {
+  var markup = '';
   fields.forEach(function(field) {
 
     switch(field.type) {
       case 'short_text':
-        markup += '<p>' + field.value + '</p>';
+        markup += '<a href="/items/' + item.id  + '">' + field.value + '</a>';
       break;
       case 'picture':
         markup += '<img src="' + field.value + '" style="widht:100px">';
@@ -77,7 +75,7 @@ $(function() {
   var mapDiv = document.getElementById('map-canvas');
   var map = new google.maps.Map(mapDiv, {
     center: new google.maps.LatLng(37.77199, -122.40366),
-    zoom: 14,
+    zoom: 13,
     mapTypeId: google.maps.MapTypeId.TERRAIN
   });
   var markers = [];
@@ -93,9 +91,9 @@ $(function() {
       position: latLng
     });
 
-  marker.infowindow = new google.maps.InfoWindow({
-    content: markupField(fields)
-  }); 
+    marker.infowindow = new google.maps.InfoWindow({
+      content: markupField(fields, item)
+    }); 
 
   markers.push(marker);
 
