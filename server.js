@@ -9,6 +9,8 @@ var buffoon = require('buffoon');
 
 var noop = function() {};
 var port = 8888;
+var host = process.argv[2] ? 'apply.pubsub.io' : 'localhost:'+port;
+
 var types = ['short_text', 'rich_text', 'date', 'duration', 'number', 'picture', 'file', 'location', 'multiple_choice', 'single_choice', 'link'];
 
 server.get('/css/vendor/*.css', bark.file('./static/style/vendor/{*}.css'));
@@ -40,8 +42,8 @@ function renderView(location, locals) {
 
 		common.step([
 			function(next) {
-				curly.get('localhost:' + port + '/api/blobs/{blob}', request.params).json(next.parallel());
-				curly.get('localhost:' + port + '/api/blobs/{blob}/items' + qs, request.params).json(next.parallel());
+				curly.get(host + '/api/blobs/{blob}', request.params).json(next.parallel());
+				curly.get(host + '/api/blobs/{blob}/items' + qs, request.params).json(next.parallel());
 			},
 			function(result) {
         locals = common.join(locals, {items: result[1], blob: result[0]}) || {};
@@ -69,11 +71,11 @@ function renderItem(location, locals) {
     var item;
 		common.step([
 			function(next) {
-				curly.get('localhost:' + port + '/api/items/{item}', request.params).json(next);
+				curly.get(host + '/api/items/{item}', request.params).json(next);
 			},
 			function(_item, next) {
         item = _item;
-				curly.get('localhost:' + port + '/api/blobs/{blob}', {blob: item.blobid}).json(next);
+				curly.get(host + '/api/blobs/{blob}', {blob: item.blobid}).json(next);
 			},
 			function(blob) {
         locals = common.join(locals, {item: item, blob: blob}) || {};
@@ -89,7 +91,7 @@ function renderCreateItem(location, locals) {
   return function(request, response) {
 		common.step([
 			function(next) {
-				curly.get('localhost:' + port + '/api/blobs/{blob}', request.params).json(next);
+				curly.get(host + '/api/blobs/{blob}', request.params).json(next);
 			},
 			function(blob) {
         locals = common.join(locals, {blob: blob}) || {};
@@ -110,7 +112,7 @@ server.get('/blobs/create', render('./views/blobs/create.jade',{types: types, cs
 server.get('/blobs/{blob}/view', function(request, response) {
 	common.step([
 		function(next) {
-			curly.get('localhost:'+port+'/api/blobs/{blob}', request.params).json(next);
+			curly.get(host+'/api/blobs/{blob}', request.params).json(next);
 		},
 		function(blob) {
 			render('./views/blobs/view.jade', {css: ['blobs/view'], js:['blobs/view'], blob:blob})(request, response);
@@ -124,7 +126,7 @@ server.get('/blobs/{blob}/view', function(request, response) {
 server.get('/blobs/{blob}', function(request, response) {
 	common.step([
 		function(next) {
-			curly.get('localhost:' + port + '/api/blobs/{blob}/view', request.params).json(next);
+			curly.get(host + '/api/blobs/{blob}/view', request.params).json(next);
 		},
 		function(blob) {
 			if (!blob) {
