@@ -154,7 +154,7 @@ server.get('/blobs/{blob}/gallery', renderView('./views/blobs/gallery.jade', {cs
 
 // items
 server.get('/blobs/{blob}/items/create', renderCreateItem('./views/blobs/items/create.jade', {css: ['vendor/jquery-ui'], js: ['items/edit']}));
-server.get('/items/{item}', renderItem('./views/blobs/items/show.jade', {css: ['items/show']}));
+server.get('/items/{item}', renderItem('./views/blobs/items/show.jade', {css: ['items/show'], js: ['items/show']}));
 server.get('/items/{item}/edit', renderItem('./views/blobs/items/edit.jade', {css: ['vendor/jquery-ui'], js: ['items/edit']}));
 
 server.post('/tojson', function(request, response) { //hacky! to help the client side send json
