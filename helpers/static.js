@@ -1,6 +1,6 @@
 var STATIC = {};
 
-STATIC.getField = function (item, name) {
+STATIC.getFieldByName = function (item, name) {
   var field;
 
   item.fields.some(function (el) {
@@ -11,7 +11,38 @@ STATIC.getField = function (item, name) {
     return has;
   });
 
-  return field;
+  return field || {};
+};
+
+STATIC.getFieldByType = function (item, type) {
+  var field;
+
+  item.fields.some(function (el) {
+    var has = el.type === type;
+    if (has) {
+      field = el;
+    }
+    return has;
+  });
+
+  return field || {};
+};
+
+STATIC.filterFields = function (item, types) {
+  return types.reduce(function (memo, el) {
+    memo.push(STATIC.getFieldByType(item, el));
+    return memo;
+  }, []);
+}
+
+STATIC.truncate = function (str, num) {
+  var limit = num || 20;
+
+  if (str.length > limit) {
+    return str.slice(0, limit) + '...';
+  } else {
+    return str;
+  }
 };
 
 STATIC.renderField = function (field) {
