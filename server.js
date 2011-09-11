@@ -58,12 +58,17 @@ function renderView(location, locals) {
 
 function renderItem(location, locals) {
 	return function(request, response) {
+    var item;
 		common.step([
 			function(next) {
 				curly.get('localhost:' + port + '/api/items/{item}', request.params).json(next);
 			},
-			function(item) {
-        locals = common.join(locals, {item: item}) || {};
+			function(_item, next) {
+        item = _item;
+				curly.get('localhost:' + port + '/api/blobs/{blob}', {blob: item.blobid}).json(next);
+			},
+			function(blob) {
+        locals = common.join(locals, {item: item, blob: blob}) || {};
 				render(location, locals)(request, response);
 			}
 		], function(err) {
@@ -71,6 +76,23 @@ function renderItem(location, locals) {
 		});
 	}
 }
+
+function renderCreateItem(location, locals) {
+  return function(request, response) {
+		common.step([
+			function(next) {
+				curly.get('localhost:' + port + '/api/blobs/{blob}', request.params).json(next);
+			},
+			function(blob) {
+        locals = common.join(locals, {blob: blob}) || {};
+				render(location, locals)(request, response);
+			}
+		], function(err) {
+			bark.jade('./views/404.jade')(request, response);	
+		});
+	}
+};
+
 server.get('/', render('./views/index.jade', {css: ['index']}));
 
 // create blob
@@ -109,13 +131,14 @@ server.get('/blobs/{blob}', function(request, response) {
 		bark.jade('./jade/404.jade')(request, response);
 	});
 });
+
 server.get('/blobs/{blob}/grid', renderView('./views/blobs/grid.jade', {css: ['blobs/grid']}));
 server.get('/blobs/{blob}/tabular', renderView('./views/blobs/tabular.jade', {js: ['blobs/tabular']}));
 server.get('/blobs/{blob}/map', renderView('./views/blobs/map.jade', {css: ['blobs/map'], js: ['blobs/map']}));
 server.get('/blobs/{blob}/gallery', renderView('./views/blobs/gallery.jade', {css: ['blobs/gallery']}));
 
 // items
-server.get('/blobs/{blob_id}/items/create', render('./views/blobs/items/create.jade', {css: ['vendor/jquery-ui']}));
+server.get('/blobs/{blob}/items/create', renderCreateItem('./views/blobs/items/create.jade', {css: ['vendor/jquery-ui']}));
 server.get('/items/{item}', renderItem('./views/blobs/items/show.jade', {css: ['items/show']}));
 server.get('/items/{item}/edit', renderItem('./views/blobs/items/edit.jade', {css: ['vendor/jquery-ui'], js: ['items/edit']}));
 

@@ -1,4 +1,6 @@
-h1 Edit item
+h1
+  a(href= '/items/' + self.item.id) #{self.truncate(self.item.fields[0].value, 20)} 
+  | &raquo; Edit item
 
 form(action= '/items/' + self.item.id + '/edit', method= 'POST')
   fieldset

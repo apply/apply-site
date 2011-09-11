@@ -1,11 +1,15 @@
-- var acceptable = ['location'];
-- var fields = self.filterFields(self.items[0], acceptable)
+- if (self.items.length)
+  - var acceptable = ['location'];
+  - var fields = self.filterFields(self.items[0], acceptable)
 
-h1= self.blob.name
-a.button.create(href= '/blobs/' + self.blob.id + '/items/create') Create a #{self.blob.itemName}
+  h1= self.blob.name
+  a.button.create(href= '/blobs/' + self.blob.id + '/items/create') Create a #{self.blob.itemName}
 
-!= self.renderFilters(fields)
+  != self.renderFilters(fields)
 
 #map-canvas
-script(src = 'http://maps.googleapis.com/maps/api/js?sensor=true')
-script!= "var items = " + JSON.stringify(self.items)
+  script(src = 'http://maps.googleapis.com/maps/api/js?sensor=true')
+  script!= "var items = " + JSON.stringify(self.items)
+
+- else
+  .box.warning This blob doesn't contain any #{self.blob.itemName}

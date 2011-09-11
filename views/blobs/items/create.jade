@@ -1,11 +1,10 @@
-- // HARDCODED
-- var blob = {_id: 12, types: [{name: 'Name', type: 'short_text'}, {name: 'Description', type: 'rich_text'}, {name: 'Avatar', type: 'picture'}]}
+h1
+  a(href= '/blobs/' + self.blob.id) #{self.truncate(self.blob.name, 20)} 
+  | &raquo; Create #{self.blob.itemName}
 
-h1 Create item
-
-form(action= '/blobs/' + blob._id + '/items', method= 'POST')
+form(action= '/blobs/' + self.blob._id + '/items', method= 'POST')
   fieldset
-    - each type in blob.types
+    - each type in self.blob.types
       != self.renderFormField(type)
 
   .operations

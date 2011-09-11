@@ -1,5 +1,8 @@
 - var fields = self.filterFields(self.item, ['short_text'])
-h1= fields[0].value
+h1
+  a(href= '/blobs/' + self.blob.id) #{self.truncate(self.blob.name, 20)} 
+  | &raquo; 
+  = fields[0].value
 a.button.edit(href= '/items/' + self.item.id + '/edit') Edit
 
 ul
