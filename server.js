@@ -209,3 +209,6 @@ if (process.argv[2]) {
 	
 }
 
+process.on('uncaughtException', function(err) {
+	console.error(err.stack);
+})
