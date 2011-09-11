@@ -185,4 +185,4 @@ server.post('/tojson', function(request, response) { //hacky! to help the client
 
 api.listen(server);
 
-server.listen(8888);
+server.listen(process.argv[2] || 8888);
