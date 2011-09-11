@@ -84,6 +84,9 @@ exports.listen = function(server) {
 		db.blobs.find({}, {_id:0}, callbackify(respond));
 	}));
 
+	server.get('/api/blobs/{blob}/view', jsonize(function(request, respond) {
+		db.blobs.findOne({id:request.params.blob}, {_id:0, view:1}, callbackify(respond));
+	}));
 	server.post('/api/blobs/{blob}/view', onpost({view:1}, function(request, blob, respond) {
 		if (!(blob.view in {map:1, tabular:1, grid:1, gallery:1})) {
 			respond(400, {error:'invalid view'});
