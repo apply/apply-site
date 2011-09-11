@@ -37,7 +37,9 @@ function renderView(location, locals) {
 			function(result) {
         locals = common.join(locals, {items: result[1], blob: result[0]}) || {};
         locals.css = locals.css || [];
-        locals.css.push('/blobs/' + result[0].view);
+        if (result[0].view) {
+          locals.css.push('/blobs/' + result[0].view);
+        }
 				render(location, locals)(request, response);
 			}
 		], function(err) {
