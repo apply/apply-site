@@ -55,22 +55,22 @@ var filterFields = function (item, types) {
 };
 
 var markupField = function(fields) {
-	[ { "name": "Location", "type": "location", "value": { "lat": 37.993898, "lng": -122.320799 } }, { "name": "Name", "type": "short_text", "value": "Harbour Way Elementary Community Day School" } ]
-	
-	var markup = '';	
-	fields.forEach(function(field) {
-		
-		switch(field.type) {
-			case 'short_text':
-				markup += '<p>' + field.value + '</p>';
-			break;
-			case 'picture':
-				markup += '<img src="' + field.value + '" style="widht:100px">';
-			break;
-		}			
-	});
+  [ { "name": "Location", "type": "location", "value": { "lat": 37.993898, "lng": -122.320799 } }, { "name": "Name", "type": "short_text", "value": "Harbour Way Elementary Community Day School" } ]
 
-	return markup;
+  var markup = '';  
+  fields.forEach(function(field) {
+
+    switch(field.type) {
+      case 'short_text':
+        markup += '<p>' + field.value + '</p>';
+      break;
+      case 'picture':
+        markup += '<img src="' + field.value + '" style="widht:100px">';
+      break;
+    }     
+  });
+
+  return markup;
 };
 
 $(function() {
@@ -83,27 +83,27 @@ $(function() {
   var markers = [];
 
   items.forEach(function(item) {
-  	var fields = filterFields(item, ['location', ['short_text', 'rich_text', 'picture']]);
-  	
-  	var latLng = new google.maps.LatLng(fields[0].value.lat, fields[0].value.lng);
+    var fields = filterFields(item, ['location', ['short_text', 'rich_text', 'picture']]);
+
+    var latLng = new google.maps.LatLng(fields[0].value.lat, fields[0].value.lng);
 
 
-  	var marker = new google.maps.Marker({
-    	map: map,
-    	position: latLng
+    var marker = new google.maps.Marker({
+      map: map,
+      position: latLng
     });
 
-	marker.infowindow = new google.maps.InfoWindow({
-		content: markupField(fields)
-	});	
+  marker.infowindow = new google.maps.InfoWindow({
+    content: markupField(fields)
+  }); 
 
-	markers.push(marker);
+  markers.push(marker);
 
-	google.maps.event.addListener(marker, 'click', function() {  
-		markers.forEach(function(m) {
-			m.infowindow.close();
-		});
-		marker.infowindow.open(map, marker);
-	});
+  google.maps.event.addListener(marker, 'click', function() {  
+    markers.forEach(function(m) {
+      m.infowindow.close();
+    });
+    marker.infowindow.open(map, marker);
+  });
   });
 });
