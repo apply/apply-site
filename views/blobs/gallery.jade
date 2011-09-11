@@ -1,13 +1,11 @@
-- // HARDCODED
-- var blob = {_id: 12, name: 'People'}
-- var types = ['Name', 'Avatar']
-- var items = [{_id: 1, fields: [{name: 'Name', value: 'Pau Ramon', type: 'short_text'}, {name: 'Avatar', value: '/images/default_picture.png', type: 'image'}]}]
+- var acceptable = ['picture', 'short_text'];
 
-h1= blob.name
+h1= self.blob.name
 
 ul
-  - each item in items
+  - each item in self.items
+    - var fields = self.filterFields(item, ['short_text', 'picture'])
     li
-      a(href= '/blobs/' + blob._id + '/items/' + item._id)
-        img(src= self.getFieldByName(item, types[1]).value, alt= self.getFieldByName(item, types[0]).value)
-        div.title= self.getFieldByName(item, types[0]).value
+      a(href= '/items/' + item.id)
+        img(src= (fields[1] ? fields[1]..value : '/images/default_picture.png'))
+        div.title= fields[0].value

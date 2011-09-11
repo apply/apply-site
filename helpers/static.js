@@ -29,11 +29,28 @@ STATIC.getFieldByType = function (item, type) {
 };
 
 STATIC.filterFields = function (item, types) {
+  var taken = [];
+
   return types.reduce(function (memo, el) {
-    memo.push(STATIC.getFieldByType(item, el));
+    var field;
+
+    if (Array.isArray(el)) {
+      el.some(function (e) {
+        field = STATIC.getFieldByType(item, e);
+        return field && field.type && taken.indexOf(field.type) === -1;
+      });
+    } else {
+      field = STATIC.getFieldByType(item, el);
+    }
+
+    if (field && field.type && taken.indexOf(field.type) === -1) {
+      memo.push(field);
+      taken.push(field.type);
+    }
+
     return memo;
   }, []);
-}
+};
 
 STATIC.truncate = function (str, num) {
   var limit = num || 20;

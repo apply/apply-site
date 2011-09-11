@@ -5,7 +5,7 @@ var url = 'https://maps.googleapis.com/maps/api/place/search/json?location=37.77
 
 var types = ['short_text', 'rich_text', 'date', 'duration', 'number', 'picture', 'file', 'location', 'multiple_choice', 'single_choice', 'link'];
 
-var strip = function(st) {
+var strip = function(str) {
 	return str.replace(/<.*?>/g, '');
 };
 
@@ -45,6 +45,10 @@ common.step([
 		        	name: 'Location',
 		            type: 'location'
 		        },
+		        {
+		        	name: 'icon',
+		        	type: 'picture'
+		        }
 		    ]
 		}, next);
 	},
@@ -76,6 +80,11 @@ common.step([
 		        	name: 'Location',
 		            type: 'location',
 		            value: place.geometry.location
+		        },
+		        {
+		        	name: 'icon',
+		        	type: 'picture',
+		        	value: place.icon
 		        }
 		    ]
 			}
