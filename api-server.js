@@ -1,5 +1,6 @@
 var jsonize = require('jsonize');
 var common = require('common');
+var curly = require('curly');
 var db = require('mongojs').connect('mongodb://root:root@staff.mongohq.com:10041/apply', ['blobs', 'items']);
 
 var callbackify = function(respond) {
@@ -121,7 +122,7 @@ exports.listen = function(server) {
 		});
 
 		return item;
-	}
+	};
 
 	// items
 	server.get('/api/blobs/{blob}/items', jsonize(function(request, respond) {
@@ -175,4 +176,71 @@ exports.listen = function(server) {
 			}
 		], respond);
 	}));
+
+	var GETT_TOKEN = 'dUx0ampKOUk4ODJDZTZEb1lwcGgybTZVQUw3ampNSHRxdDkyMy1kc0BvcGVuLC1XNnZ5c0Ixdy1BdDdCLVp0YkNNcGQ3dUJ1SWpDaElnc0dN';
+	var SHARE = '9c9Uud7';
+
+	server.get('/api/file/{filename}', function(request, response) {
+		var name = request.params.filename;
+		var query = require('url').parse(request.url, true).query;
+
+		common.step([
+			function(next) {
+				curly.get('http://api.ge.tt/0/{0}/{1}/translate', SHARE, name).json(next);
+			},
+			function(file) {
+				var suffix = (query.width || query.height) ? '/scale/' + (query.width || '') + 'x' + (query.height || '') : '';
+
+				curly.get('http://api.ge.tt/0/{0}/{1}/blob'+suffix, SHARE, file.fileid).proxy(response);
+			}
+		], function() {
+			response.writeHead(404);
+			response.end();
+		});
+	});
+	server.post('/api/file/{filename}', function(request, response) {
+		var name = request.params.filename;
+		var buf;
+		var ended = false;
+
+		request.pause();
+
+		request.once('data', function(data) {
+			buf = data;
+		});
+		request.once('end', function() {
+			ended = true;
+		});
+
+		common.step([
+			function(next) {
+				curly.get('http://api.ge.tt/1/{0}/create', SHARE).query({token:GETT_TOKEN, filename:name}).json(next);
+			},
+			function(file) {
+				delete request.headers.host;
+
+				var post = curly.post(file.uploadurl).headers(request.headers);
+				var onend = function() {
+					response.writeHead(200, {'content-type':'text/html'});
+					response.end('<!DOCTYPE html><html><head></head><body></body></html>');
+				};
+
+				request.resume();
+
+				if (buf) {
+					post.write(buf);
+				}
+				if (ended) {
+					post.end();
+					onend();
+				} else {
+					request.pipe(post);
+					request.on('end', onend);
+				}
+			}
+		], function() {
+			response.writeHead(500);
+			response.end();
+		});
+	});
 };
