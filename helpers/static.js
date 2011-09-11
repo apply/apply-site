@@ -108,7 +108,7 @@ STATIC.renderFormField = function (field, value) {
          + '<textarea id="' + id + '" name="item[' + name + ']">' + value + '</textarea>';
   case 'date':
     return '<label for="' + id + '">' + field.name + '</label>'
-         + '<input class="date datepicker" type="date" id="' + id + '" name="item[' + name + ']" value="' + _date(value).format('MM/DD/YY')  + '" />';
+         + '<input class="date datepicker" type="date" id="' + id + '" name="item[' + name + ']" value="' + (value ? _date(value).format('MM/DD/YY') : '')  + '" />';
   case 'duration':
     return '<label for="' + id + '">' + field.name + '</label>'
          + '<input class="duration" type="text" id="' + id + '" name="item[' + name + '][value]" value="' + value + '" />'
@@ -165,6 +165,10 @@ STATIC.humanizeDate = function (date, from) {
 };
 
 STATIC.print = function (field) {
+  if (!field.value) {
+    return '';
+  }
+
   switch (field.type) {
   case 'date':
     return STATIC.humanizeDate(field.value);
@@ -184,7 +188,7 @@ STATIC.renderFilters = function (fields, data) {
 
   html = '<form id="filters"><div id="full_text">';
   if (fields.length) {
-    html += '<a class="arrow" href="#"></a>';
+    //html += '<a class="arrow" href="#"></a>';
   }
   html += '<input type="text" name="search[full_text]" value="' + (data.full_text || '') + '" />';
   html += '</div>';
