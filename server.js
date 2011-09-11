@@ -3,7 +3,9 @@ var api = require('./api-server');
 var bark = require('bark');
 var common = require('common');
 
+
 var noop = function() {};
+var apihost = 'localhost';
 var types = ['short_text', 'rich_text', 'date', 'duration', 'number', 'picture', 'file', 'location', 'multiple_choice', 'single_choice', 'link'];
 
 server.get('/css/*.css', bark.stylus('./static/style/{*}.styl'));
@@ -25,6 +27,38 @@ function render(location, locals) {
   }
 }
 
+function renderView(location) {
+	return 	function(request, response) {
+		common.step([
+			function(next) {
+				curly.get('localhost:' + port + '/api/blob/{blob}', request.params).json(next.parallel());
+				curly.get('localhost:' + port + '/api/blob/{blob}/items', request.params).json(next.parallel());
+			},
+			function(result) {
+				var blob = result[0];
+				var items = result[1];
+				render(location,{item: item, blob: blob})(request, response);
+			}
+		], function(err) {
+			bark.jade('./views/404.jade')(request, response);	
+		});
+	}
+};
+
+function renderItem(location) {
+	return function(request, response) {
+		common.step([
+			function(next) {
+				curly.get('localhost:' + port + '/api/items/{item}', reuquest.params).json(next);
+			},
+			function(item) {
+				render(location,{item: item})(request, response);
+			}
+		], function(err) {
+			bark.jade('./jade/404.jade')(request, response);
+		});
+	}
+}
 server.get('/', render('./views/index.jade'));
 
 // create blob
@@ -34,11 +68,22 @@ server.get('/blobs/create', render('./views/blobs/create.jade',{types: types}));
 server.get('/blobs/{id}/view', render('./views/blobs/view.jade'));
 
 // blob view
-server.get('/blobs/{blob_id}', echo);
-server.get('/blobs/{blob_id}/grid', render('./views/blobs/grid.jade'));
-server.get('/blobs/{blob_id}/tabular', render('./views/blobs/tabular.jade'));
-server.get('/blobs/{blob_id}/map', render('./views/blobs/map.jade'));
-server.get('/blobs/{blob_id}/gallery', render('./views/blobs/gallery.jade'));
+server.get('/blobs/{blob_id}', function(request, reponse) {
+	common.step([
+		function(next) {
+			curly.get('localhost:' + port + '/api/blobs/{blob_id}/view').json(next);
+		},
+		function(blob) {
+			renderView('./views/blobs/' + blob.view + '.jade');
+		}
+	], function(err) {
+		bark.jade('./jade/404.jade')(request, response);
+	});
+});
+server.get('/blobs/{blob}/grid', renderView('./views/blobs/grid.jade'));
+server.get('/blobs/{blob}/tabular', renderView('./views/blobs/tabular.jade'));
+server.get('/blobs/{blob}/map', renderView('./views/blobs/map.jade'));
+server.get('/blobs/{blob}/gallery', renderView('./views/blobs/gallery.jade'));
 
 // items
 server.get('/blobs/{blob_id}/items/create', render('./views/blobs/items/create.jade'));
