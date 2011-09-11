@@ -3,6 +3,8 @@ var api = require('./api-server');
 var bark = require('bark');
 var common = require('common');
 var curly = require('curly');
+var url = require('url');
+var querystring = require('querystring');
 
 var noop = function() {};
 var port = 8888;
@@ -29,10 +31,15 @@ function render(location, locals) {
 
 function renderView(location, locals) {
   return function(request, response) {
+  		// consoel.log query string
+  		
+		var query = url.parse(request.url, true).query;
+		var qs = '?' + querystring.stringify(query);
+
 		common.step([
 			function(next) {
 				curly.get('localhost:' + port + '/api/blobs/{blob}', request.params).json(next.parallel());
-				curly.get('localhost:' + port + '/api/blobs/{blob}/items', request.params).json(next.parallel());
+				curly.get('localhost:' + port + '/api/blobs/{blob}/items' + qs, request.params).json(next.parallel());
 			},
 			function(result) {
         locals = common.join(locals, {items: result[1], blob: result[0]}) || {};
