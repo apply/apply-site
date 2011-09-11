@@ -133,18 +133,20 @@ STATIC.renderFormField = function (field, value) {
     return 'TODO: MAP';
   case 'multi_choice':
     var options = field.options.reduce(function (memo, el) {
-          return memo + '<options value="' + el + '">' + el + '</options>';
+          return memo + '<option value="' + el + '">' + el + '</option>';
         }, '');
     return '<label for="' + id + '">' + field.name + '</label>'
          + '<select name="item[' + name + '][units]" multiple>'
+           + '<option value="">Select one or more</option>'
            + options
          + '</select>';
   case 'single_choice':
     var options = field.options.reduce(function (memo, el) {
-          return memo + '<options value="' + el + '">' + el + '</options>';
+          return memo + '<option value="' + el + '">' + el + '</option>';
         }, '');
     return '<label for="' + id + '">' + field.name + '</label>'
          + '<select name="item[' + name + '][units]">'
+           + '<option value="">Select one</option>'
            + options
          + '</select>';
   case 'link':

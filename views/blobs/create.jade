@@ -1,10 +1,10 @@
 h1
-  span.active Definition
-  span &raquo; Visualization
+  span Definition 
+  span.inactive &raquo; Visualization
 
 .box.warning A blob is a collection
 
-form(href= '', method= 'POST')
+form(href= '', id= 'creator', method= 'POST')
   fieldset.general
     .field
       label(for= 'blob_name') Blob name
@@ -15,18 +15,20 @@ form(href= '', method= 'POST')
     .clearer
 
   fieldset.types_from
-    - each type in self.types
-      a(href='#', class= type)
-        img(src= '/images/types/' + type + '.png', alt= type)
-        = type.replace('_', ' ').replace(/^\w/, function($0) { return $0.toUpperCase(); })
+    ul
+      - each type in self.types
+        li.type
+          a(href='#', class= type)
+            img(src= '/images/types/' + type + '.png', alt= type)
+            = type.replace('_', ' ').replace(/^\w/, function($0) { return $0.toUpperCase(); })
 
   fieldset.types_to
     ul
       li.type
-        img.drag(src= '/images/drag.png', alt= 'drag')
         img.type(src= '/images/types/short_text.png', alt= 'Short text')
         span.value
-        input.value(type= 'text', name= '')
+        input.type(type= 'hidden', name= 'blob[items][type]', value= 'short_text')
+        input.value(type= 'text', name= 'blob[items][value]', value= '')
     input.submit(type= 'submit', value= 'Next')
   .clearer
 
