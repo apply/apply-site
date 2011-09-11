@@ -7,10 +7,12 @@ form#filters
   #full_text
     a.arrow(href= '#')
     input(type= 'text')
+
   fieldset#advanced
     - each field in fields
-      .field
-        != self.renderFormField(field)
+      -if (['short_text', 'rich_text'].indexOf(field.type) === -1)
+        .field
+          != self.renderFormField(field)
 
 table
   thead
