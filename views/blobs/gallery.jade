@@ -6,6 +6,6 @@ ul
   - each item in self.items
     - var fields = self.filterFields(item, ['short_text', 'picture'])
     li
-      a(href= '/blobs/' + item.blobid + '/items/' + item.id)
-        img(src= (fields[1] ? self.getFieldByName(item, fields[1].name).value : '/images/default_picture.png'))
-        div.title= self.getFieldByName(item, fields[0].name).value
+      a(href= '/items/' + item.id)
+        img(src= (fields[1] ? fields[1]..value : '/images/default_picture.png'))
+        div.title= fields[0].value

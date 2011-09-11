@@ -1,0 +1,37 @@
+@import "./static/style/variables"
+@import "./static/style/mixins"
+
+$size = 960 / 6
+
+ul
+  li
+    display: inline-block
+    margin: 0px 20px 20px 0px
+
+    a
+      width: $size - 20px
+      display: inline-block
+      vertical-align: top
+      text-align: center
+      position: relative
+
+      img
+        display: block
+
+      .title
+        position: absolute
+        background: rgba(0, 0, 0, 0.6)
+        color: #fff
+        width: 100%
+        height: 30px
+        bottom: 0px
+        padding: 5px
+        width: $size - 30px
+        display: none
+
+      &:hover
+        text-decoration: none
+
+        .title
+          text-decoration: none
+          display: block

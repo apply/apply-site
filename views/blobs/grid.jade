@@ -7,5 +7,5 @@ ul.grid
     - var fields = self.filterFields(item, ['short_text', acceptable])
     li(class= i % 5 === 0 ? 'first' : '')
       a(href= '/blobs/' + self.blob.id + '/items/' + item.id)
-        = self.truncate(self.getFieldByName(item, fields[0].name).value, 30)
-      p= self.truncate(self.getFieldByName(item, fields[1].name).value, 120)
+        = self.truncate(fields[0].value, 30)
+      p= self.truncate(fields[1].value, 120)

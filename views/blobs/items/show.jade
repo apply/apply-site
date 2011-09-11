@@ -1,9 +1,10 @@
-- // HARDCODED
-- var item = {_id: 1, fields: [{name: 'Name', value: 'Pau Ramon', type: 'short_text'}, {name: 'Avatar', value: '/images/default_picture.png', type: 'picture'}], blob: {_id: 13}}
-- var title = 'Pau Ramon'
+- var fields = self.filterFields(self.item, ['short_text'])
+h1= fields[0].value
+a.button(href= '/items/' + self.item.id + '/edit') Edit
 
-h1= title
-a.button(href= '/blobs/' + item.blob._id + '/items/' + item._id + '/edit') Edit
-
-- each field in item.fields
-  != self.renderField(field)
+ul
+  - each field in self.item.fields
+    li.field
+      h2= field.name
+      .content!= self.renderField(field)
+.clearer

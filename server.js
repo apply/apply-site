@@ -36,8 +36,8 @@ function renderView(location, locals) {
 			},
 			function(result) {
         locals = common.join(locals, {items: result[1], blob: result[0]}) || {};
-        locals.css = locals.css || [];
         if (result[0].view) {
+          locals.css = locals.css || [];
           locals.css.push('/blobs/' + result[0].view);
         }
 				render(location, locals)(request, response);
@@ -48,14 +48,15 @@ function renderView(location, locals) {
 	}
 };
 
-function renderItem(location) {
+function renderItem(location, locals) {
 	return function(request, response) {
 		common.step([
 			function(next) {
-				curly.get('localhost:' + port + '/api/items/{item}', reuquest.params).json(next);
+				curly.get('localhost:' + port + '/api/items/{item}', request.params).json(next);
 			},
 			function(item) {
-				render(location,{item: item})(request, response);
+        locals = common.join(locals, {item: item}) || {};
+				render(location, locals)(request, response);
 			}
 		], function(err) {
 			bark.jade('./jade/404.jade')(request, response);
@@ -96,8 +97,8 @@ server.get('/blobs/{blob}/gallery', renderView('./views/blobs/gallery.jade', {cs
 
 // items
 server.get('/blobs/{blob_id}/items/create', render('./views/blobs/items/create.jade'));
-server.get('/items/{item}', renderItem('./views/blobs/items/show.jade'));
-server.get('/items/{item}/edit', renderItem('./views/blobs/items/edit.jade'));
+server.get('/items/{item}', renderItem('./views/blobs/items/show.jade', {css: ['/items/show']}));
+server.get('/items/{item}/edit', renderItem('./views/blobs/items/edit.jade', {css: ['/items/edit']}));
 
 api.listen(server);
 
