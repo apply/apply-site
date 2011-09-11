@@ -69,7 +69,18 @@ server.get('/', render('./views/index.jade', {css: ['index']}));
 server.get('/blobs/create', render('./views/blobs/create.jade',{types: types, css: ['blobs/create'], js: ['blobs/create']}));
 
 // select view
-server.get('/blobs/{blob}/view', render('./views/blobs/view.jade', {css: ['blobs/view']}));
+server.get('/blobs/{blob}/view', function(request, response) {
+	common.step([
+		function(next) {
+			curly.get('localhost:'+port+'/api/blobs/{blob}', request.params).json(next);
+		},
+		function(blob) {
+			render('./views/blobs/view.jade', {css: ['blobs/view'], js:['blobs/view'], blob:blob})(request, response);
+		}
+	], function(err) {		
+		bark.jade('./jade/404.jade')(request, response);
+	})
+});
 
 // blob view
 server.get('/blobs/{blob}', function(request, response) {
@@ -83,7 +94,7 @@ server.get('/blobs/{blob}', function(request, response) {
 				return;
 			}
 			request.url = common.format('/blobs/{blob}/view',request.params);
-			renderView('./views/blobs/' + blob.view + '.jade')(request, response);
+//			renderView('./views/blobs/' + blob.view + '.jade')(request, response);
 			server.route(request, response);
 		}
 	], function(err) {
