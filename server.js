@@ -120,6 +120,11 @@ server.get('/blobs/{blob}', function(request, response) {
 			curly.get('localhost:' + port + '/api/blobs/{blob}/view', request.params).json(next);
 		},
 		function(blob) {
+			if (!blob) {
+				response.writeHead(404);
+				response.end();
+				return;
+			}
 			if(blob.view) {
 				renderView('./views/blobs/' + blob.view + '.jade')(request, response);	
 				return;

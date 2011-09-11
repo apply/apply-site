@@ -18,12 +18,13 @@ $(function () {
           url:action,
           data: JSON.stringify({fields:blob}),
           dataType:'json',
-          success:function(blob) {
-            window.location = '/blobs/'+blob.id;
+          success:function(data) {
+            window.location = '/blobs/'+data.blobid;
           }
         });
       }
     });
+
     return false;
   });
 
@@ -33,11 +34,15 @@ $(function () {
       $('.submit').attr('disabled', true).fadeTo(100, 0.5);
     }
   , upload: function (url, file_name) {
-      $('a.js_file')
+      var $link = $('a.js_file');
+
+      $link
         .text('upload file')
         .attr('disabled', true)
         .fadeTo(100, 1)
+        .after('<input type="hidden" name="item[' + $link.prev().text() + ']" value="' + url + '" />')
         .after('<div class="box warning">' + file_name + '</div>');
+
       $('.submit').attr('disabled', false).fadeTo(100, 1);
     }
   });

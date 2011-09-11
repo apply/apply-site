@@ -14,7 +14,7 @@ a.button.create(href= '/blobs/' + self.blob.id + '/items/create') Create a #{sel
       li.item
         a(href= '/items/' + item.id)
           img(src= (fields[0] ? fields[0].value : '/images/default_picture.png'), width= 140)
-          div.title= fields[1].value
+          div.title= fields[1] ? fields[1].value : ''
   .clearer
 - else
   .box.warning This blob doesn't contain any #{self.blob.itemName}

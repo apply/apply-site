@@ -166,7 +166,7 @@ exports.listen = function(server) {
 		item.id = id();
 		item.createdAt = item.updatedAt = now();
 
-		respond = successify(respond);
+		respond = callbackify(respond);
 
 		common.step([
 			function(next) {
@@ -179,7 +179,9 @@ exports.listen = function(server) {
 					respond(new Error('oh no'));
 					return
 				}
-				db.items.save(item, respond);
+				db.items.save(item, function(err) {
+					respond(err, !err && {success:true, blobid:blob.id});
+				});
 			}
 		], respond);
 
@@ -189,7 +191,7 @@ exports.listen = function(server) {
 		db.items.findOne({id:request.params.item}, {_id:0}, callbackify(respond));
 	}));
 	server.post('/api/items/{item}', onpost({fields:1}, function(request, item, respond) {
-		respond = successify(respond);
+		respond = callbackify(respond);
 
 		common.step([
 			function(next) {
@@ -206,7 +208,9 @@ exports.listen = function(server) {
 					return;
 				}
 				pubsub.publish(item);
-				db.items.update({id:request.params.item}, {$set:{fields:item.fields, updatedAt:now()}}, respond);
+				db.items.update({id:request.params.item}, {$set:{fields:item.fields, updatedAt:now()}}, function(err) {
+					respond(err, !err && {success:true, blobid:blob.id});
+				});
 			}
 		], respond);
 	}));
