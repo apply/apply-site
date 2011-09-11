@@ -2,6 +2,23 @@ var file = require('file')
   , $ = require('jQuery');
 
 $(function () {
+ $('form').submit(function() { 
+    
+    var data = $(this).serialize();
+    console.log(data);
+    
+    $.ajax({
+      type:'POST',
+      url:'/api/blobs',
+      data: data,
+      dataType:'json',
+      success:function(blob) {
+        window.location = '/blobs/'+blob.id;
+      }
+    });
+    return false;
+  });
+
   file('a.js_file', {
     select: function (url, file_name) {
       $('a.js_file').text('uploading ' + file_name + '...').attr('disabled', true).fadeTo(100, 0.5);

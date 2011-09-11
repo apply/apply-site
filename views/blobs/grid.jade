@@ -1,9 +1,10 @@
+a.button.create(href= '/blobs/' + self.blob.id + '/items/create') Create a #{self.blob.itemName}
+
 - if (self.items.length)
   - var acceptable = ['short_text', 'rich_text', 'date', 'duration', 'number', 'multiple_choice', 'single_choice'];
   - var fields = self.filterFields(self.items[0], ['short_text', acceptable])
 
   h1= self.blob.name
-  a.button.create(href= '/blobs/' + self.blob.id + '/items/create') Create a #{self.blob.itemName}
 
   != self.renderFilters(fields)
 

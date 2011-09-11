@@ -2,7 +2,7 @@ h1
   span Definition 
   span.inactive &raquo; Visualization
 
-.box.warning A blob is a collection
+.box.warning A blob is a collection of types
 
 form(href= '', id= 'creator', method= 'POST')
   fieldset.general
@@ -28,7 +28,7 @@ form(href= '', id= 'creator', method= 'POST')
         img.type(src= '/images/types/short_text.png', alt= 'Short text')
         span.value
         input.type(type= 'hidden', name= 'blob[items][type]', value= 'short_text')
-        input.value(type= 'text', name= 'blob[items][value]', value= '')
+        input.value(type= 'text', name= 'blob[items][value]', value= '', placeholder='Title')
     input.submit(type= 'submit', value= 'Next')
   .clearer
 

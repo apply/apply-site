@@ -138,7 +138,7 @@ server.get('/blobs/{blob}/map', renderView('./views/blobs/map.jade', {css: ['blo
 server.get('/blobs/{blob}/gallery', renderView('./views/blobs/gallery.jade', {css: ['blobs/gallery']}));
 
 // items
-server.get('/blobs/{blob}/items/create', renderCreateItem('./views/blobs/items/create.jade', {css: ['vendor/jquery-ui']}));
+server.get('/blobs/{blob}/items/create', renderCreateItem('./views/blobs/items/create.jade', {css: ['vendor/jquery-ui'], js: ['items/edit']}));
 server.get('/items/{item}', renderItem('./views/blobs/items/show.jade', {css: ['items/show']}));
 server.get('/items/{item}/edit', renderItem('./views/blobs/items/edit.jade', {css: ['vendor/jquery-ui'], js: ['items/edit']}));
 

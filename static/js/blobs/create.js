@@ -20,6 +20,7 @@ $(function () {
       });
     });
 
+    console.log(post);
     $.ajax({
       type:'POST',
       url:'/api/blobs',
@@ -41,8 +42,14 @@ $(function () {
       , $cloned = $types_to.find('li.type').eq(0).clone(true)
       , $cloned_img = $cloned.find('img.type');
 
+    var name = klass.replace('_', ' ').replace(/^\w/, function($0) { return $0.toUpperCase(); });
     $cloned_img.attr('src', $cloned_img.attr('src').replace(/(\/images\/types\/).*?(\.png)/, '$1' + klass + '$2'));
+    
+    if(['single_choice','multiple_choice'].indexOf(klass) > -1) {
+      $cloned.append('<input type="text" placeholder="comma separated choices" name="blob[items][choices]" />');
+    }
     $cloned.find('input.type').val(klass);
+    $cloned.find('input.value').attr('placeholder',name);
     $cloned.append('<a class="delete" href="#">delete</a>');
     $cloned.prepend('<img class="drag" src="/images/drag.png" alt="drag" />');
     $cloned.find('a.delete').click(onDelete);
