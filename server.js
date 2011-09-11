@@ -170,7 +170,7 @@ server.post('/tojson', function(request, response) { //hacky! to help the client
 			for (var i in str) {
 				var item = {};
 
-				item.name = i.match(/\[([^\]]+)\]/)[1];
+        item.name = i.match(/\[([^\]]+)\]/)[1];
 				item.value = str[i];
 
 				result.push(item);

@@ -94,7 +94,7 @@ STATIC.renderField = function (field) {
 };
 
 STATIC.renderFormField = function (field, value) {
-  var name = field.name.toLowerCase()
+  var name = field.name
     , id = 'item_' + name;
 
   value = value || '';

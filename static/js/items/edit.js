@@ -8,7 +8,7 @@ $(function () {
     var action = $(this).attr('action');
     var id = window.location.pathname.split('/')[2];
 
-    data += '&lat=' + marker.getPosition().Pa + '&lon=' + marker.getPosition().Qa;
+    data += '&item[Location]=' + marker.getPosition().Pa + ';' + marker.getPosition().Qa;
 
     $.ajax({
       type:'POST',
