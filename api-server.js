@@ -126,51 +126,40 @@ exports.listen = function(server) {
 		return item;
 	};
 
-	var build = function(item, term) {
-		var queries = [];
-		var i = 0;
-		
-		console.log('item',item);
-		
-		item.types.forEach(function(type) {
-			
-			switch(type.types) {
-				case 'short_text':
-				case 'rich_text':
-				case 'multiple_choice':
-				case 'single_choice':
-				queries.push('{fields[' + i + '].value : {$regex : ""' + term + '"i" }}');
-				break;
-			}
-			i++;
-		});
-		return queries.length ? { $or : queries } : {};
-	};
-
 	// items
 	server.get('/api/blobs/{blob}/items', jsonize(function(request, respond) {
-		var qs = url.parse(request.url, true);
+		var qs = url.parse(request.url, true).query;
 		var search = qs.search;
 		
+		respond = callbackify(respond);
+
 		if(search) {
-			
 			common.step([
 				function(next) {
-					db.blobs.findOne({id:request.params.blob}, {_id:0}, next);		
+					db.items.find({blobid:request.params.blob}, {_id:0}, next);
 				},
-				function(blob) {
-					var q = build(blob, search);
-					console.log(q);
-					db.items.find(common.join({blobid:request.params.blob},q), {_id:0}, callbackify(respond));
+				function(items) {
+					var is = [];
+					items.forEach(function(item) {
+						var found = false;
+						item.fields.forEach(function(field) {
+							if((field.value + '').toLowerCase().indexOf(search.toLowerCase()) > -1) {
+								found = true;
+							}
+						});
+						if(found) {
+							is.push(item);
+						}
+					});
+					respond(null,is);
 				}
-			], function() {
-				respond({});
-			})
+			], respond );
+
 			return;	
 		}
 		
 
-		db.items.find({blobid:request.params.blob}, {_id:0}, callbackify(respond));
+		db.items.find({blobid:request.params.blob}, {_id:0}, respond);
 	}));
 	server.post('/api/blobs/{blob}/items', onpost({fields:1}, function(request, item, respond) {
 		item.blobid = request.params.blob;
