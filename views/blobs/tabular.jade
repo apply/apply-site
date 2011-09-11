@@ -3,16 +3,7 @@
 
 h1= self.blob.name
 
-form#filters
-  #full_text
-    a.arrow(href= '#')
-    input(type= 'text')
-
-  fieldset#advanced
-    - each field in fields
-      -if (['short_text', 'rich_text'].indexOf(field.type) === -1)
-        .field
-          != self.renderFormField(field)
+!= self.renderFilters(fields)
 
 table
   thead

@@ -155,4 +155,28 @@ STATIC.renderFormField = function (field, value) {
   };
 };
 
+STATIC.renderFilters = function (fields) {
+  var html;
+
+  fields = fields.filter(function (field) {
+    return ['short_text', 'rich_text'].indexOf(field.type) === -1;
+  });
+
+  html = '<form id="filters"><div id="full_text">';
+  if (fields.length) {
+    html += '<a class="arrow" href="#"></a>';
+  }
+  html += '<input type="text" />';
+  html += '</div>';
+
+  html += '<fieldset id="advanced">';
+  fields.forEach(function (field) {
+    html += '<div class="field">' + STATIC.renderFormField(field) + '</div>';
+  });
+  html += '</fieldset>';
+  html += '</form>';
+
+  return html;
+};
+
 module.exports = STATIC;
