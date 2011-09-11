@@ -66,7 +66,7 @@ server.get('/', render('./views/index.jade', {css: ['index']}));
 server.get('/blobs/create', render('./views/blobs/create.jade',{types: types, css: ['blobs/create']}));
 
 // select view
-server.get('/blobs/{id}/view', render('./views/blobs/view.jade', {css: ['blobs/view']}));
+server.get('/blobs/{blob}/view', render('./views/blobs/view.jade', {css: ['blobs/view']}));
 
 // blob view
 server.get('/blobs/{blob}', function(request, response) {
@@ -75,7 +75,13 @@ server.get('/blobs/{blob}', function(request, response) {
 			curly.get('localhost:' + port + '/api/blobs/{blob}/view', request.params).json(next);
 		},
 		function(blob) {
+			if(blob.view) {
+				renderView('./views/blobs/' + blob.view + '.jade')(request, response);	
+				return;
+			}
+			request.url = common.format('/blobs/{blob}/view',request.params);
 			renderView('./views/blobs/' + blob.view + '.jade')(request, response);
+			server.route(request, response);
 		}
 	], function(err) {
 		bark.jade('./jade/404.jade')(request, response);
@@ -88,8 +94,8 @@ server.get('/blobs/{blob}/gallery', renderView('./views/blobs/gallery.jade', {cs
 
 // items
 server.get('/blobs/{blob_id}/items/create', render('./views/blobs/items/create.jade'));
-server.get('/items/{item_id}', renderItem('./views/blobs/items/show.jade'));
-server.get('/items/{item_id}/edit', renderItem('./views/blobs/items/edit.jade'));
+server.get('/items/{item}', renderItem('./views/blobs/items/show.jade'));
+server.get('/items/{item}/edit', renderItem('./views/blobs/items/edit.jade'));
 
 api.listen(server);
 
