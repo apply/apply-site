@@ -3,6 +3,7 @@ var common = require('common');
 var curly = require('curly');
 var db = require('mongojs').connect('mongodb://root:root@staff.mongohq.com:10041/apply', ['blobs', 'items']);
 var pubsub = require('pubsub.io').connect('hub.pubsub.io/apply');
+var url = require('url');
 
 var callbackify = function(respond) {
 	return function(err, data) {
@@ -125,8 +126,50 @@ exports.listen = function(server) {
 		return item;
 	};
 
+	var build = function(item, term) {
+		var queries = [];
+		var i = 0;
+		
+		console.log('item',item);
+		
+		item.types.forEach(function(type) {
+			
+			switch(type.types) {
+				case 'short_text':
+				case 'rich_text':
+				case 'multiple_choice':
+				case 'single_choice':
+				queries.push('{fields[' + i + '].value : {$regex : ""' + term + '"i" }}');
+				break;
+			}
+			i++;
+		});
+		return queries.length ? { $or : queries } : {};
+	};
+
 	// items
 	server.get('/api/blobs/{blob}/items', jsonize(function(request, respond) {
+		var qs = url.parse(request.url, true);
+		var search = qs.search;
+		
+		if(search) {
+			
+			common.step([
+				function(next) {
+					db.blobs.findOne({id:request.params.blob}, {_id:0}, next);		
+				},
+				function(blob) {
+					var q = build(blob, search);
+					console.log(q);
+					db.items.find(common.join({blobid:request.params.blob},q), {_id:0}, callbackify(respond));
+				}
+			], function() {
+				respond({});
+			})
+			return;	
+		}
+		
+
 		db.items.find({blobid:request.params.blob}, {_id:0}, callbackify(respond));
 	}));
 	server.post('/api/blobs/{blob}/items', onpost({fields:1}, function(request, item, respond) {
