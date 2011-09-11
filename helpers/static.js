@@ -108,7 +108,7 @@ STATIC.renderFormField = function (field, value) {
          + '<textarea id="' + id + '" name="item[' + name + ']">' + value + '</textarea>';
   case 'date':
     return '<label for="' + id + '">' + field.name + '</label>'
-         + '<input class="date datepicker" type="date" id="' + id + '" name="item[' + name + ']" value="' + (value ? _date(value).format('MM/DD/YY') : '')  + '" />';
+         + '<input class="date datepicker" type="text" id="' + id + '" name="item[' + name + ']" value="' + (value ? _date(value).format('MM/DD/YY') : '')  + '" />';
   case 'duration':
     return '<label for="' + id + '">' + field.name + '</label>'
          + '<input class="duration" type="text" id="' + id + '" name="item[' + name + '][value]" value="' + value + '" />'

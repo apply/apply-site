@@ -1,8 +1,10 @@
 h1
+  a(href= '/blobs/' + self.blob.id) #{self.truncate(self.blob.name, 20)} 
+  | &raquo; 
   a(href= '/items/' + self.item.id) #{self.truncate(self.item.fields[0].value, 20)} 
   | &raquo; Edit item
 
-form(action= '/items/' + self.item.id + '/edit', method= 'POST')
+form(action= '/api/items/' + self.item.id, method= 'POST')
   fieldset
     - each field in self.item.fields
       .field

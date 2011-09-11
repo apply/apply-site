@@ -2,11 +2,10 @@ var file = require('file')
   , $ = require('jQuery');
 
 $(function () {
- $('form').submit(function() { 
-    
+ $('form').submit(function() {
+
     var data = $(this).serialize();
-    console.log(data);
-    
+
     $.ajax({
       type:'POST',
       url:'/api/blobs',

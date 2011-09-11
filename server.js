@@ -44,10 +44,17 @@ function renderView(location, locals) {
 			},
 			function(result) {
         locals = common.join(locals, {items: result[1], blob: result[0]}) || {};
+
         if (!locals.css && result[0].view) {
           locals.css = [];
           locals.css.push('blobs/' + result[0].view);
         }
+
+        if (!locals.js && result[0].view) {
+          locals.js = [];
+          locals.js.push('blobs/' + result[0].view);
+        }
+
 				render(location, locals)(request, response);
 			}
 		], function(err) {
@@ -135,7 +142,7 @@ server.get('/blobs/{blob}', function(request, response) {
 server.get('/blobs/{blob}/grid', renderView('./views/blobs/grid.jade', {css: ['blobs/grid']}));
 server.get('/blobs/{blob}/tabular', renderView('./views/blobs/tabular.jade', {js: ['blobs/tabular']}));
 server.get('/blobs/{blob}/map', renderView('./views/blobs/map.jade', {css: ['blobs/map'], js: ['blobs/map']}));
-server.get('/blobs/{blob}/gallery', renderView('./views/blobs/gallery.jade', {css: ['blobs/gallery']}));
+server.get('/blobs/{blob}/gallery', renderView('./views/blobs/gallery.jade', {css: ['blobs/gallery'], js: ['blobs/gallery']}));
 
 // items
 server.get('/blobs/{blob}/items/create', renderCreateItem('./views/blobs/items/create.jade', {css: ['vendor/jquery-ui'], js: ['items/edit']}));
