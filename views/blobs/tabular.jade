@@ -1,18 +1,17 @@
 - // HARDCODED
-- var blob = {_id: 12, name: 'People'}
-- var fields = ['Name', 'Credits', 'Hackaton hours']
-- var items = [{_id: 1, fields: [{name: 'Name', value: 'Pau Ramon', type: 'short_text'}, {name: 'Credits', value: 42, type: 'number'}, {name: 'Hackaton hours', value: 36000, type: 'duration'}]}]
+- var acceptable = ['short_text', 'date', 'duration', 'number', 'multiple_choice', 'single_choice', 'link'];
+- var fields = self.filterFields(self.items[0], ['short_text', acceptable, acceptable, acceptable, acceptable])
 
-h1= blob.name
+h1= self.blob.name
 
 table
+  tr
   - each field in fields
-    tr
-      th
-        = field.toLowerCase()
-        a.arrow(href= '#')
+    th
+      = field.name.toLowerCase()
+      a.arrow(href= '#')
 
-  - each item in items
+  - each item in self.items
     tr
       - each field in fields
-        td= self.getFieldByName(item, field).value
+        td= self.getFieldByName(item, field.name).value
