@@ -3,17 +3,25 @@ var file = require('file')
 
 $(function () {
  $('form').submit(function() { 
-    
     var data = $(this).serialize();
-    console.log(data);
-    
+    var action = $(this).attr('action');
+    var id = window.location.pathname.split('/')[2];
+
     $.ajax({
       type:'POST',
-      url:'/api/blobs',
+      url:'/tojson',
       data: data,
       dataType:'json',
       success:function(blob) {
-        window.location = '/blobs/'+blob.id;
+        $.ajax({
+          type:'POST',
+          url:action,
+          data: JSON.stringify({fields:blob}),
+          dataType:'json',
+          success:function(blob) {
+            window.location = '/blobs/'+blob.id;
+          }
+        });
       }
     });
     return false;

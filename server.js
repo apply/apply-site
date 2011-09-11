@@ -5,6 +5,7 @@ var common = require('common');
 var curly = require('curly');
 var url = require('url');
 var querystring = require('querystring');
+var buffoon = require('buffoon');
 
 var noop = function() {};
 var port = 8888;
@@ -141,6 +142,34 @@ server.get('/blobs/{blob}/gallery', renderView('./views/blobs/gallery.jade', {cs
 server.get('/blobs/{blob}/items/create', renderCreateItem('./views/blobs/items/create.jade', {css: ['vendor/jquery-ui'], js: ['items/edit']}));
 server.get('/items/{item}', renderItem('./views/blobs/items/show.jade', {css: ['items/show']}));
 server.get('/items/{item}/edit', renderItem('./views/blobs/items/edit.jade', {css: ['vendor/jquery-ui'], js: ['items/edit']}));
+
+server.post('/tojson', function(request, response) { //hacky! to help the client side send json
+	common.step([
+		function(next) {
+			buffoon.string(request, next);
+		},
+		function(str) {
+			str = querystring.parse(str);
+
+			var result = [];
+
+			for (var i in str) {
+				var item = {};
+
+				item.name = i.match(/\[([^\]]+)\]/)[1];
+				item.value = str[i];
+
+				result.push(item);
+			}
+
+			response.writeHead(200, {'content-type':'application/json'});
+			response.end(JSON.stringify(result));
+		}
+	], function(err) {
+		response.writeHead(500);
+		response.end();
+	});
+});
 
 api.listen(server);
 
