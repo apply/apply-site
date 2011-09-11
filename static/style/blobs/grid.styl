@@ -1,0 +1,26 @@
+@import "./static/style/variables"
+@import "./static/style/mixins"
+
+$size = 190px
+
+ul
+  width: $size * 5 + 10
+
+  li
+    background: $p_lightest
+    width: $size - 20px
+    height: $size - 20px
+    padding: 10px
+    display: inline-block
+    border-left: 2px solid darken($p_lightest, 10)
+    border-bottom: 2px solid darken($p_lightest, 10)
+    vertical-align: top
+    text-decoration: 0px 1px 0px #fff
+
+    a
+      font-size: 14pt
+    p
+      color: $p_medium
+
+    &.first
+      border-left: none

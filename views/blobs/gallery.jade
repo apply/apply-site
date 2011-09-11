@@ -9,5 +9,5 @@ ul
   - each item in items
     li
       a(href= '/blobs/' + blob._id + '/items/' + item._id)
-        img(src= self.getField(item, types[1]).value, alt= self.getField(item, types[0]).value)
-        div.title= self.getField(item, types[0]).value
+        img(src= self.getFieldByName(item, types[1]).value, alt= self.getFieldByName(item, types[0]).value)
+        div.title= self.getFieldByName(item, types[0]).value
