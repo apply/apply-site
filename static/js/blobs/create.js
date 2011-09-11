@@ -55,7 +55,7 @@ $(function () {
       $cloned.append('<input type="text" placeholder="Comma separated choices" name="blob[items][choices]" class="choices" />');
     }
     $cloned.find('input.type').val(klass);
-    $cloned.find('input.value').attr('placeholder',name);
+    $cloned.find('input.value').attr('placeholder',name).val('');
     $cloned.append('<a class="delete" href="#">delete</a>');
     $cloned.prepend('<img class="drag" src="/images/drag.png" alt="drag" />');
     $cloned.find('a.delete').click(onDelete);
