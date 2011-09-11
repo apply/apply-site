@@ -23,10 +23,6 @@ var echo = function(request, response) {
   response.end(JSON.stringify({url:request.url, params:request.params}));
 };
 
-var api = function() {
-	
-};
-
 function render(location, locals) {
   return function (request, response) {
     locals = common.join(locals, require('./helpers/static')) || {};
