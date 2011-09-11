@@ -80,7 +80,7 @@ STATIC.renderField = function (field) {
   case 'file':
     return '<div class="file"><a href="' + field.value + '" /></div>';
   case 'location':
-    return '<div id="map" style="height:200px;"></div><script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script><script>google.maps.event.addDomListener(window, "load", function () {setMap()});</script>';
+    return '<div id="map" style="height:200px;"></div><script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script><script>google.maps.event.addDomListener(window, "load", function () {setMap({lat: ' + field.value.lat + ', lng: ' + field.value.lng + '})});</script>';
   case 'multiple_choice':
     var li = field.value.reduce(function (memo, el) {
           return memo + '<li>' + el + '</li>';
@@ -133,7 +133,7 @@ STATIC.renderFormField = function (field, value) {
          + '<a class="js_file button" href="javascript:void()">upload file</a>';
   case 'location':
     return '<label>' + field.name + '</label>'
-         + '<div id="map" style="height:200px;"></div><script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script><script>google.maps.event.addDomListener(window, "load", function () {setMap()});</script>';
+         + '<div id="map" style="height:200px;"></div><script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script><script>google.maps.event.addDomListener(window, "load", function () {setMap({lat: ' + field.value.lat + ', lng: ' + field.value.lng + '})});</script>';
   case 'multiple_choice':
     var options = field.options.reduce(function (memo, el) {
           return memo + '<option value="' + el + '">' + el + '</option>';
