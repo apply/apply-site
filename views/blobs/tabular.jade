@@ -3,11 +3,11 @@
 
 h1= self.blob.name
 
-#filters
+form#filters
   #full_text
     a.arrow(href= '#')
-    input(type= 'text', placeholder= 'Searching')
-  #advanced
+    input(type= 'text')
+  fieldset#advanced
     - each field in fields
       .field
         != self.renderFormField(field)
