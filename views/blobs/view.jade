@@ -1,6 +1,6 @@
 - // HARDCODED
-- var blob = {id: 12}
 - var canUseView = function () {return true;}
+- var blob = self.blob
 
 h1
   span.inactive Definition
@@ -17,7 +17,7 @@ form(href= '/api/blobs/' + blob.id + '/view', method= 'POST')
 
   ul
     - each view in views
-      li.view
+      li.view(style= blob.availableViews.indexOf(view) > -1 ? '' : 'opacity: 0.4')
         img(src= '/images/views/' + view + '.png', alt= view)
         input.radio(type= 'radio', value= view, name= 'blob[view]')
         strong= view.replace('_', ' ').replace(/^\w/, function($0) { return $0.toUpperCase(); })
