@@ -34,33 +34,35 @@ fieldset.types_to
   float: left
 
   li.type
-      padding: 5px
-      background: $p_lightest
-      width: 675px
+    padding: 5px
+    background: $p_lightest
+    width: 675px
+    vertical-align: middle
+    margin-bottom: 6px
+    position: relative
+
+    input.choices
+      margin-left: 20px
+
+    img.drag
       vertical-align: middle
-      margin-bottom: 6px
-      position: relative
+      margin-right: 20px
+      cursor: move
 
-      img.drag
-        vertical-align: middle
-        margin-right: 20px
-        cursor: move
+    img.type
+      vertical-align: middle
+      margin-right: 10px
+      opacity: 0.3
 
-      img.type
-        vertical-align: middle
-        margin-right: 10px
-        opacity: 0.3
+    a.delete
+      position: absolute
+      font-size: 13pt
+      top: 13px
+      right: 15px
+      display: none
 
-      a.delete
-        position: absolute
-        font-size: 13pt
-        top: 13px
-        right: 15px
-        display: none
-
-      &:hover a.delete
-        display: block
-
+    &:hover a.delete
+      display: block
 
   input.submit
     float: right

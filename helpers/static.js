@@ -81,7 +81,7 @@ STATIC.renderField = function (field) {
     return '<div class="file"><a href="' + field.value + '" /></div>';
   case 'location':
     return 'TODO: MAP';
-  case 'multi_choice':
+  case 'multiple_choice':
     var li = field.value.reduce(function (memo, el) {
           return memo + '<li>' + el + '</li>';
         }, '');
@@ -132,7 +132,7 @@ STATIC.renderFormField = function (field, value) {
          + '<a class="js_file button" href="javascript:void()">upload file</a>';
   case 'location':
     return 'TODO: MAP';
-  case 'multi_choice':
+  case 'multiple_choice':
     var options = field.options.reduce(function (memo, el) {
           return memo + '<option value="' + el + '">' + el + '</option>';
         }, '');

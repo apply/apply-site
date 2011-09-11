@@ -14,13 +14,19 @@ $(function () {
     post.itemName = $('#blob_item_name').val();
 
     $(this).find('fieldset.types_to li.type').each(function(i, el) {
-      post.types.push({
+      var options = {
         name: $(el).find('input.value').val(),
         type: $(el).find('input.type').val()
-      });
+      };
+
+      if ($(el).find('input.choices').val()) {
+        options.options = $(el).find('input.choices').val().split(',');
+      }
+      console.log(options);
+
+      post.types.push(options);
     });
 
-    console.log(post);
     $.ajax({
       type:'POST',
       url:'/api/blobs',
@@ -46,7 +52,7 @@ $(function () {
     $cloned_img.attr('src', $cloned_img.attr('src').replace(/(\/images\/types\/).*?(\.png)/, '$1' + klass + '$2'));
     
     if(['single_choice','multiple_choice'].indexOf(klass) > -1) {
-      $cloned.append('<input type="text" placeholder="comma separated choices" name="blob[items][choices]" />');
+      $cloned.append('<input type="text" placeholder="Comma separated choices" name="blob[items][choices]" class="choices" />');
     }
     $cloned.find('input.type').val(klass);
     $cloned.find('input.value').attr('placeholder',name);
