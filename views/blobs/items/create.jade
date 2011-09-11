@@ -2,7 +2,7 @@ h1
   a(href= '/blobs/' + self.blob.id) #{self.truncate(self.blob.name, 20)} 
   | &raquo; Create #{self.blob.itemName}
 
-form(action= '/blobs/' + self.blob.id + '/items', method= 'POST')
+form(action= '/api/blobs/' + self.blob.id + '/items', method= 'POST')
   fieldset
     - each type in self.blob.types
       != self.renderFormField(type)
