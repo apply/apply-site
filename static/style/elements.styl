@@ -20,3 +20,54 @@
   &:hover
     border: 2px solid darken($s_medium, 10)
     text-decoration: underline
+
+#filters
+  position: relative
+  top: -50px
+  padding-top: 60px
+
+  #full_text
+    position: absolute
+    top: 0
+    right: 0
+    border: 1px solid $p_light
+    background: #f6f7f8
+    padding: 10px
+    z-index: 2
+
+    input
+      box-shadow: 1px 1px 1px lighten($p_light, 5) inset
+      border: 1px solid $p_light
+      padding: 10px 17px
+      font-size: 11pt
+      color: $p_dark
+      background: #fff url(/images/search.png) no-repeat 7px 7px;
+      vertical-align: middle
+
+    a.arrow
+      background: url(/images/arrow.png) no-repeat 0px 12px
+      display: inline-block
+      padding-right: 15px
+      width: 15px
+      height: 30px
+      vertical-align: middle
+
+  #advanced
+    display: none
+    position: relative
+    top: -1px
+    background: #dbdbdc url(/images/metalic.png) repeat-x top left
+    border: 1px solid $p_light
+    padding: 20px 20px 10px 20px
+
+    .field
+      padding-left: none
+      border-left: none
+      display: inline-block
+      margin-right: 50px
+
+  &.open #full_text
+    border-bottom: none
+
+  &.open #advanced
+    display: block
