@@ -5,7 +5,8 @@ h1
 form(action= '/api/blobs/' + self.blob.id + '/items', method= 'POST')
   fieldset
     - each type in self.blob.types
-      != self.renderFormField(type)
+      .field
+        != self.renderFormField(type)
 
   .operations
     input.button(type= 'submit', value= 'Create')
