@@ -41,9 +41,9 @@ server.get('/blobs/{blob_id}/map', render('./views/blobs/map.jade'));
 server.get('/blobs/{blob_id}/gallery', render('./views/blobs/gallery.jade'));
 
 // items
-server.get('/blobs/{blob_id}/items/create', echo);
+server.get('/blobs/{blob_id}/items/create', render('./views/blobs/items/create.jade'));
 server.get('/blobs/{blob_id}/items/{item_id}', render('./views/blobs/items/show.jade'));
-server.get('/blobs/{blob_id}/items/{item_id}/edit', echo);
+server.get('/blobs/{blob_id}/items/{item_id}/edit', render('./views/blobs/items/edit.jade'));
 
 api.listen(server);
 
