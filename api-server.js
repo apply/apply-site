@@ -2,6 +2,7 @@ var jsonize = require('jsonize');
 var common = require('common');
 var curly = require('curly');
 var db = require('mongojs').connect('mongodb://root:root@staff.mongohq.com:10041/apply', ['blobs', 'items']);
+var pubsub = require('pubsub.io').connect('hub.pubsub.io/apply');
 
 var callbackify = function(respond) {
 	return function(err, data) {
@@ -172,6 +173,7 @@ exports.listen = function(server) {
 					respond(new Error('oh no'));
 					return;
 				}
+				pubsub.publish(item);
 				db.items.update({id:request.params.item}, {$set:{fields:item.fields, updatedAt:now()}}, respond);
 			}
 		], respond);
