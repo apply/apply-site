@@ -1,11 +1,14 @@
 - var acceptable = ['picture', 'short_text'];
+- var fields = self.filterFields(self.items[0], acceptable)
 
 h1= self.blob.name
 
+!= self.renderFilters(fields)
+
 ul
   - each item in self.items
-    - var fields = self.filterFields(item, ['short_text', 'picture'])
+    - var fields = self.filterFields(item, acceptable)
     li
       a(href= '/items/' + item.id)
-        img(src= (fields[1] ? fields[1]..value : '/images/default_picture.png'))
+        img(src= (fields[1] ? fields[1].value : '/images/default_picture.png'), width= 140)
         div.title= fields[0].value

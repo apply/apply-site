@@ -1,3 +1,8 @@
+- var acceptable = ['location'];
+- var fields = self.filterFields(self.items[0], acceptable)
+
+!= self.renderFilters(fields)
+
 #map-canvas
 script(src = 'http://maps.googleapis.com/maps/api/js?sensor=true')
 script!= "var items = " + JSON.stringify(self.items)

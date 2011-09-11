@@ -43,8 +43,8 @@ function renderView(location, locals) {
 			},
 			function(result) {
         locals = common.join(locals, {items: result[1], blob: result[0]}) || {};
-        if (result[0].view) {
-          locals.css = locals.css || [];
+        if (!locals.css && result[0].view) {
+          locals.css = [];
           locals.css.push('blobs/' + result[0].view);
         }
 				render(location, locals)(request, response);
@@ -109,7 +109,7 @@ server.get('/blobs/{blob}', function(request, response) {
 	});
 });
 server.get('/blobs/{blob}/grid', renderView('./views/blobs/grid.jade', {css: ['blobs/grid']}));
-server.get('/blobs/{blob}/tabular', renderView('./views/blobs/tabular.jade'));
+server.get('/blobs/{blob}/tabular', renderView('./views/blobs/tabular.jade', {js: ['blobs/tabular']}));
 server.get('/blobs/{blob}/map', renderView('./views/blobs/map.jade', {css: ['blobs/map'], js: ['blobs/map']}));
 server.get('/blobs/{blob}/gallery', renderView('./views/blobs/gallery.jade', {css: ['blobs/gallery']}));
 

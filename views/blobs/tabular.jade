@@ -3,23 +3,19 @@
 
 h1= self.blob.name
 
-form#filters
-  #full_text
-    a.arrow(href= '#')
-    input(type= 'text')
-  fieldset#advanced
-    - each field in fields
-      .field
-        != self.renderFormField(field)
+!= self.renderFilters(fields)
 
 table
-  tr
-  - each field in fields
-    th
-      = field.name.toLowerCase()
-      a.arrow(href= '#')
-
-  - each item in self.items
+  thead
     tr
       - each field in fields
-        td= field.value
+        th
+          = field.name.toLowerCase()
+          a.arrow(href= '#')
+
+  tbody
+    - each item in self.items
+      - var fields = self.filterFields(item, ['short_text', acceptable, acceptable, acceptable, acceptable])
+      tr
+        - each field in fields
+          td= field.value

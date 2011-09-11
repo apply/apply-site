@@ -71,3 +71,19 @@
 
   &.open #advanced
     display: block
+
+th.header
+  .arrow
+    display: none
+
+  &:hover .arrow
+    display: block
+    opacity: 0.5
+
+  &.headerSortUp .arrow, &.headerSortDown .arrow
+    display: block
+    opacity: 1
+
+  &.headerSortUp .arrow
+    background: url(/images/arrow.png) no-repeat top left
+    margin-top: -3px
