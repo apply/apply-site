@@ -129,7 +129,7 @@ exports.listen = function(server) {
 	// items
 	server.get('/api/blobs/{blob}/items', jsonize(function(request, respond) {
 		var qs = url.parse(request.url, true).query;
-		var search = qs.search;
+		var search = qs['search[full_text]'];
 		
 		respond = callbackify(respond);
 
