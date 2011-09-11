@@ -38,6 +38,8 @@ fieldset.types_to
       background: $p_lightest
       width: 675px
       vertical-align: middle
+      margin-bottom: 6px
+      position: relative
 
       img.drag
         vertical-align: middle
@@ -47,6 +49,17 @@ fieldset.types_to
         vertical-align: middle
         margin-right: 10px
         opacity: 0.3
+
+      a.delete
+        position: absolute
+        font-size: 13pt
+        top: 13px
+        right: 15px
+        display: none
+
+      &:hover a.delete
+        display: block
+
 
   input.submit
     float: right

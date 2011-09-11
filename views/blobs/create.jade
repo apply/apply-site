@@ -15,18 +15,20 @@ form(href= '', method= 'POST')
     .clearer
 
   fieldset.types_from
-    - each type in self.types
-      a(href='#', class= type)
-        img(src= '/images/types/' + type + '.png', alt= type)
-        = type.replace('_', ' ').replace(/^\w/, function($0) { return $0.toUpperCase(); })
+    ul
+      - each type in self.types
+        li.type
+          a(href='#', class= type)
+            img(src= '/images/types/' + type + '.png', alt= type)
+            = type.replace('_', ' ').replace(/^\w/, function($0) { return $0.toUpperCase(); })
 
   fieldset.types_to
     ul
       li.type
-        img.drag(src= '/images/drag.png', alt= 'drag')
         img.type(src= '/images/types/short_text.png', alt= 'Short text')
         span.value
-        input.value(type= 'text', name= '')
+        input.type(type= 'hidden', name= 'blob[items][0][type]', value= 'short_text')
+        input.value(type= 'text', name= 'blob[items][0][value]', value= '')
     input.submit(type= 'submit', value= 'Next')
   .clearer
 
