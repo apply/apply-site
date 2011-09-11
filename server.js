@@ -25,6 +25,24 @@ function render(location, locals) {
   }
 }
 
+function renderView(location) {
+	return 	function(request, response) {
+		common.step([
+			function(next) {
+				curly.get('api/blob/{blob}', request.params).json(next.parallel());
+				curly.get('api/blob/{blob}/items', request.params).json(next.parallel());
+			},
+			function(result) {
+				var blob = result[0];
+				var items = result[1];
+				bark.jade(location,{items: items, blob: blob})(request, response);
+			}
+		], function(err) {
+			bark.jade('./views/404.jade')(request, response);	
+		});
+	}
+};
+
 server.get('/', render('./views/index.jade'));
 
 // create blob
@@ -34,11 +52,11 @@ server.get('/blobs/create', render('./views/blobs/create.jade',{types: types}));
 server.get('/blobs/{id}/view', render('./views/blobs/view.jade'));
 
 // blob view
-server.get('/blobs/{id}', echo);
-server.get('/blobs/{blob}/grid', render('./views/blobs/grid.jade'));
-server.get('/blobs/{blob}/tabular', render('./views/blobs/tabular.jade'));
-server.get('/blobs/{blob}/map', render('./views/blobs/map.jade'));
-server.get('/blobs/{blob}/gallery', render('./views/blobs/gallery.jade'));
+server.get('/blobs/{id}', );
+server.get('/blobs/{blob}/grid', renderView('./views/blobs/grid.jade'));
+server.get('/blobs/{blob}/tabular', renderView('./views/blobs/tabular.jade'));
+server.get('/blobs/{blob}/map', renderView('./views/blobs/map.jade'));
+server.get('/blobs/{blob}/gallery', renderView('./views/blobs/gallery.jade'));
 
 // items
 server.get('/blobs/{blob}/items/create', echo);
