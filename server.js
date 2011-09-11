@@ -9,7 +9,7 @@ var buffoon = require('buffoon');
 
 var noop = function() {};
 var port = 8888;
-var host = process.argv[2] ? 'apply.pubsub.io' : 'localhost:'+port;
+var host = 'localhost:'+port;
 
 var types = ['short_text', 'rich_text', 'date', 'duration', 'number', 'picture', 'file', 'location', 'multiple_choice', 'single_choice', 'link'];
 
@@ -21,6 +21,10 @@ server.get('/images/*', bark.file('./static/images/{*}'));
 var echo = function(request, response) {
   response.writeHead(200);
   response.end(JSON.stringify({url:request.url, params:request.params}));
+};
+
+var api = function() {
+	
 };
 
 function render(location, locals) {
@@ -187,4 +191,25 @@ server.post('/tojson', function(request, response) { //hacky! to help the client
 
 api.listen(server);
 
-server.listen(process.argv[2] || 8888);
+if (process.argv[2]) {
+	var net = require('net');
+	
+	net.createServer(function(sock) {
+		sock.pause();
+
+		var cli = net.createConnection(process.argv[2]);
+
+		cli.on('connect', function() {
+			sock.resume();
+			sock.pipe(cli);
+			cli.pipe(sock);
+		});
+
+	}).listen(8888);
+
+	server.listen(process.argv[2]);
+} else {
+	server.listen(8888);
+	
+}
+
