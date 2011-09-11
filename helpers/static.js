@@ -1,4 +1,5 @@
-var STATIC = {};
+var STATIC = {}
+  , _date = require('underscore.date');
 
 STATIC.getFieldByName = function (item, name) {
   var field;
@@ -107,7 +108,7 @@ STATIC.renderFormField = function (field, value) {
          + '<textarea id="' + id + '" name="item[' + name + ']">' + value + '</textarea>';
   case 'date':
     return '<label for="' + id + '">' + field.name + '</label>'
-         + '<input class="date" type="date" id="' + id + '" name="item[' + name + ']" value="' + value + '" />';
+         + '<input class="date datepicker" type="date" id="' + id + '" name="item[' + name + ']" value="' + _date(value).format('MM/DD/YY')  + '" />';
   case 'duration':
     return '<label for="' + id + '">' + field.name + '</label>'
          + '<input class="duration" type="text" id="' + id + '" name="item[' + name + '][value]" value="' + value + '" />'
@@ -156,7 +157,6 @@ STATIC.renderFormField = function (field, value) {
 };
 
 STATIC.humanizeDate = function (date, from) {
-  var _date = require('underscore.date');
   if (date === from) {
     return 'today';
   } else {

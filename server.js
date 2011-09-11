@@ -10,6 +10,7 @@ var noop = function() {};
 var port = 8888;
 var types = ['short_text', 'rich_text', 'date', 'duration', 'number', 'picture', 'file', 'location', 'multiple_choice', 'single_choice', 'link'];
 
+server.get('/css/vendor/*.css', bark.file('./static/style/vendor/{*}.css'));
 server.get('/css/*.css', bark.stylus('./static/style/{*}.styl'));
 server.get('/js/*', bark.rex('./static/js/{*}'));
 server.get('/images/*', bark.file('./static/images/{*}'));
@@ -114,9 +115,9 @@ server.get('/blobs/{blob}/map', renderView('./views/blobs/map.jade', {css: ['blo
 server.get('/blobs/{blob}/gallery', renderView('./views/blobs/gallery.jade', {css: ['blobs/gallery']}));
 
 // items
-server.get('/blobs/{blob_id}/items/create', render('./views/blobs/items/create.jade'));
+server.get('/blobs/{blob_id}/items/create', render('./views/blobs/items/create.jade', {css: ['vendor/jquery-ui']}));
 server.get('/items/{item}', renderItem('./views/blobs/items/show.jade', {css: ['items/show']}));
-server.get('/items/{item}/edit', renderItem('./views/blobs/items/edit.jade', {js: ['items/edit']}));
+server.get('/items/{item}/edit', renderItem('./views/blobs/items/edit.jade', {css: ['vendor/jquery-ui'], js: ['items/edit']}));
 
 api.listen(server);
 
