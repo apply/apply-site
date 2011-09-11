@@ -9,7 +9,7 @@ var port = 8888;
 var types = ['short_text', 'rich_text', 'date', 'duration', 'number', 'picture', 'file', 'location', 'multiple_choice', 'single_choice', 'link'];
 
 server.get('/css/*.css', bark.stylus('./static/style/{*}.styl'));
-server.get('/js/*', bark.rex('./static/js/*'));
+server.get('/js/*', bark.rex('./static/js/{*}'));
 server.get('/images/*', bark.file('./static/images/{*}'));
 
 var echo = function(request, response) {
@@ -38,7 +38,7 @@ function renderView(location, locals) {
         locals = common.join(locals, {items: result[1], blob: result[0]}) || {};
         if (result[0].view) {
           locals.css = locals.css || [];
-          locals.css.push('/blobs/' + result[0].view);
+          locals.css.push('blobs/' + result[0].view);
         }
 				render(location, locals)(request, response);
 			}
@@ -97,8 +97,8 @@ server.get('/blobs/{blob}/gallery', renderView('./views/blobs/gallery.jade', {cs
 
 // items
 server.get('/blobs/{blob_id}/items/create', render('./views/blobs/items/create.jade'));
-server.get('/items/{item}', renderItem('./views/blobs/items/show.jade', {css: ['/items/show']}));
-server.get('/items/{item}/edit', renderItem('./views/blobs/items/edit.jade', {css: ['/items/edit']}));
+server.get('/items/{item}', renderItem('./views/blobs/items/show.jade', {css: ['items/show']}));
+server.get('/items/{item}/edit', renderItem('./views/blobs/items/edit.jade', {js: ['items/edit']}));
 
 api.listen(server);
 

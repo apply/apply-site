@@ -92,24 +92,24 @@ STATIC.renderField = function (field) {
   };
 };
 
-STATIC.renderFormField = function (type, value) {
-  var name = type.name.toLowerCase()
+STATIC.renderFormField = function (field, value) {
+  var name = field.name.toLowerCase()
     , id = 'item_' + name;
 
   value = value || '';
 
-  switch (type.type) {
+  switch (field.type) {
   case 'short_text':
-    return '<label for="' + id + '">' + type.name + '</label>'
+    return '<label for="' + id + '">' + field.name + '</label>'
          + '<input type="text" id="' + id + '" name="item[' + name + ']" value="' + value + '" />';
   case 'rich_text':
-    return '<label for="' + id + '">' + type.name + '</label>'
+    return '<label for="' + id + '">' + field.name + '</label>'
          + '<textarea id="' + id + '" name="item[' + name + ']">' + value + '</textarea>';
   case 'date':
-    return '<label for="' + id + '">' + type.name + '</label>'
+    return '<label for="' + id + '">' + field.name + '</label>'
          + '<input class="date" type="date" id="' + id + '" name="item[' + name + ']" value="' + value + '" />';
   case 'duration':
-    return '<label for="' + id + '">' + type.name + '</label>'
+    return '<label for="' + id + '">' + field.name + '</label>'
          + '<input class="duration" type="text" id="' + id + '" name="item[' + name + '][value]" value="' + value + '" />'
          + '<select name="item[' + name + '][units]">'
            + '<option value="years">years</option>'
@@ -121,34 +121,34 @@ STATIC.renderFormField = function (type, value) {
            + '<option value="seconds">seconds</option>'
          + '</select>';
   case 'number':
-    return '<label for="' + id + '">' + type.name + '</label>'
+    return '<label for="' + id + '">' + field.name + '</label>'
          + '<input class="number" type="number" id="' + id + '" name="item[' + name + ']" value="' + value + '" />';
   case 'picture':
-    return '<label for="' + id + '">' + type.name + '</label>'
-         + '<input class="picture" type="file" id="' + id + '" name="item[' + name + ']" value="' + value + '" />';
+    return '<label for="' + id + '">' + field.name + '</label>'
+         + '<a class="js_file button" href="javascript:void()">upload file</a>';
   case 'file':
-    return '<label for="' + id + '">' + type.name + '</label>'
-         + '<input class="file" type="file" id="' + id + '" name="item[' + name + ']" value="' + value + '" />';
+    return '<label for="' + id + '">' + field.name + '</label>'
+         + '<a class="js_file button" href="javascript:void()">upload file</a>';
   case 'location':
     return 'TODO: MAP';
   case 'multi_choice':
-    var options = type.options.reduce(function (memo, el) {
+    var options = field.options.reduce(function (memo, el) {
           return memo + '<options value="' + el + '">' + el + '</options>';
         }, '');
-    return '<label for="' + id + '">' + type.name + '</label>'
+    return '<label for="' + id + '">' + field.name + '</label>'
          + '<select name="item[' + name + '][units]" multiple>'
            + options
          + '</select>';
   case 'single_choice':
-    var options = type.options.reduce(function (memo, el) {
+    var options = field.options.reduce(function (memo, el) {
           return memo + '<options value="' + el + '">' + el + '</options>';
         }, '');
-    return '<label for="' + id + '">' + type.name + '</label>'
+    return '<label for="' + id + '">' + field.name + '</label>'
          + '<select name="item[' + name + '][units]">'
            + options
          + '</select>';
   case 'link':
-    return '<label for="' + id + '">' + type.name + '</label>'
+    return '<label for="' + id + '">' + field.name + '</label>'
          + '<input class="url" type="url" id="' + id + '" name="item[' + name + ']" value="' + value + '" />';
   };
 };

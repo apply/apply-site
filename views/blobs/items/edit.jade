@@ -1,13 +1,10 @@
-- // HARDCODED
-- var blob = {_id: 12, types: [{name: 'Name', type: 'short_text'}, {name: 'Description', type: 'rich_text'}, {name: 'Avatar', type: 'picture'}]}
-- var item = {_id: 1, fields: [{name: 'Name', value: 'Pau Ramon', type: 'short_text'}, {name: 'Description', value: 'Lorem Ipsum crap', type: 'rich_text'}, {name: 'Avatar', value: '/images/default_picture.png', type: 'picture'}]}
+h1 Edit item
 
-h1 Create item
-
-form(action= '/blobs/' + blob._id + '/items', method= 'POST')
+form(action= '/items/' + self.item.id + '/edit', method= 'POST')
   fieldset
-    - each type in blob.types
-      != self.renderFormField(type, self.getFieldByName(item, type.name).value)
+    - each field in self.item.fields
+      .field
+        != self.renderFormField(field, field.value)
 
   .operations
-    input.button(type= 'submit', value= 'Create')
+    input.button.submit(type= 'submit', value= 'Create')

@@ -1,6 +1,6 @@
 - var fields = self.filterFields(self.item, ['short_text'])
 h1= fields[0].value
-a.button(href= '/items/' + self.item.id + '/edit') Edit
+a.button.edit(href= '/items/' + self.item.id + '/edit') Edit
 
 ul
   - each field in self.item.fields

@@ -12,6 +12,8 @@ form
 
   .field
     margin: 0px 0px 20px 0px
+    padding-left: 10px
+    border-left: 4px solid lighten($q_medium, 10)
 
     &.inline
       display: inline-block
@@ -20,6 +22,8 @@ form
   label
     display: block
     cursor: pointer
+    font-size: 13pt
+    color: $p_dark
     margin-bottom: 5px
 
     input[type="checkbox"]
@@ -29,9 +33,13 @@ form
   textarea
     box-shadow: 1px 1px 1px lighten($p_light, 5) inset
     border: 1px solid $p_light
-    padding: 7px 10px
+    padding: 10px 17px
     font-size: 11pt
     color: $p_dark
+
+  input[type=file]
+    box-shadow: none
+    border: none
 
     &:hover
       border-color: $p_dark
