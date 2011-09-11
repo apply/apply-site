@@ -45,10 +45,17 @@ function renderView(location, locals) {
 			},
 			function(result) {
         locals = common.join(locals, {items: result[1], blob: result[0]}) || {};
+
         if (!locals.css && result[0].view) {
           locals.css = [];
           locals.css.push('blobs/' + result[0].view);
         }
+
+        if (!locals.js && result[0].view) {
+          locals.js = [];
+          locals.js.push('blobs/' + result[0].view);
+        }
+
 				render(location, locals)(request, response);
 			}
 		], function(err) {
