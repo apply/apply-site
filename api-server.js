@@ -27,10 +27,7 @@ var id = function() {
 	return common.encode(Date.now()) + Math.random().toString(36).substr(2);	
 };
 var onpost = function(required, fn) {
-	if (!fn) {
-		return jsonize(required);
-	}
-	return jsonize(function(request, blob, respond) {
+	return jsonize(!fn ? required : function(request, blob, respond) {
 		var result = {};
 
 		for (var i in required) {
@@ -101,6 +98,31 @@ exports.listen = function(server) {
 		db.blobs.findOne({id:request.params.blob}, {_id:0}, callbackify(respond));
 	}));
 
+	var normalize = function(blob, item) {
+		if (!blob) {
+			return false;
+		}
+
+		var map = {};
+
+		blob.types.forEach(function(type) {
+			map[type.name] = type;
+		});
+
+		item.fields = item.fields.map(function(field) {
+			var type = map[field.name];
+
+			if (type.options) {
+				field.options = type.options;
+			}
+			field.type = type.type;
+
+			return field;
+		});
+
+		return item;
+	}
+
 	// items
 	server.get('/api/blobs/{blob}/items', jsonize(function(request, respond) {
 		db.items.find({blobid:request.params.blob}, {_id:0}, callbackify(respond));
@@ -110,13 +132,47 @@ exports.listen = function(server) {
 		item.id = id();
 		item.createdAt = item.updatedAt = now();
 
-		db.items.save(item, successify(respond));
+		respond = successify(respond);
+
+		common.step([
+			function(next) {
+				db.blobs.findOne({id:item.blobid}, next);
+			},
+			function(blob) {
+				item = normalize(blob, item);
+
+				if (!item) {
+					respond(new Error('oh no'));
+					return
+				}
+				db.items.save(item, respond);
+			}
+		], respond);
+
 	}));
 
 	server.get('/api/items/{item}', jsonize(function(request, respond) {
 		db.items.findOne({id:request.params.item}, {_id:0}, callbackify(respond));
 	}));
 	server.post('/api/items/{item}', onpost({fields:1}, function(request, item, respond) {
-		db.items.update({id:request.params.item}, {$set:{fields:item.fields, updatedAt:now()}}, successify(respond));
+		respond = successify(respond);
+
+		common.step([
+			function(next) {
+				db.items.findOne({id:request.params.item}, next);
+			},
+			function(item, next) {
+				db.blobs.findOne({id:item.blobid}, next);				
+			},
+			function(blob) {
+				item = normalize(blob, item);
+
+				if (!item) {
+					respond(new Error('oh no'));
+					return;
+				}
+				db.items.update({id:request.params.item}, {$set:{fields:item.fields, updatedAt:now()}}, respond);
+			}
+		], respond);
 	}));
 };
