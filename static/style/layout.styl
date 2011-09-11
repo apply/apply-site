@@ -1,0 +1,35 @@
+$page-width = 960px
+$header-height = 80px
+$footer-height = 50px
+
+html,
+body
+  height: 100%
+
+#wrapper
+  width: $page-width
+  margin: 0px auto
+  min-height: 100%
+  position: relative
+
+  #sticky
+    padding-bottom: $footer-height + 40
+
+#logo
+  ir()
+  background: url(/images/logo.png) no-repeat 0px 5px
+  height: $header-height
+  width: 300px
+  margin-bottom: 40px
+  float: left
+
+#footer
+  position: relative
+  height: $footer-height - 20
+  width: $page-width
+  padding: 10px 0px
+  margin: ($footer-height + 1) * -1 auto 0px
+  clear: both
+  color: $p_medium
+  border-top: 1px solid #fff
+  box-shadow: 0px -1px 0px $p_light

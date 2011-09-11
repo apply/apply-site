@@ -1,18 +1,18 @@
-@import "reset"
-@import "variables"
-@import "mixins"
+@import "./static/style/reset"
+@import "./static/style/variables"
+@import "./static/style/mixins"
 
 body
   font-family: Helvetica, Arial, sans-serif
   font-size: 11pt
   color: $p_darkest
-  background: $p_lightest url(/images/bg.jpg) repeat top left
+  background: #fff
 
 h1
-  font-size: 32pt
+  font-size: 24pt
   margin: 0px 0px 50px
   color: $p_medium
-  height: 40px
+  font-family: Helvetica, Arial, sans-serif
 
 h2
   font-size: 18pt
@@ -62,7 +62,7 @@ dl
 .clearer
   clear: both
 
-// @import "layout"
+@import "./static/style/layout"
+@import "./static/style/elements"
 // @import "forms"
 // @import "boxes"
-// @import "elements"

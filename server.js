@@ -59,7 +59,7 @@ function renderItem(location) {
 		});
 	}
 }
-server.get('/', render('./views/index.jade'));
+server.get('/', render('./views/index.jade', {css: ['index']}));
 
 // create blob
 server.get('/blobs/create', render('./views/blobs/create.jade',{types: types}));
