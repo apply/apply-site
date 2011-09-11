@@ -133,7 +133,7 @@ STATIC.renderFormField = function (field, value) {
          + '<a class="js_file button" href="javascript:void()">upload file</a>';
   case 'location':
     return '<label>' + field.name + '</label>'
-         + '<div id="map" style="height:200px;"></div><script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script><script>google.maps.event.addDomListener(window, "load", function () {setMap({lat: ' + field.value.lat + ', lng: ' + field.value.lng + '})});</script>';
+         + '<div id="map" style="height:200px;"></div><script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script><script>google.maps.event.addDomListener(window, "load", function () {setMap(' + (field.value ? '{lat: ' + field.value.lat + ', lng: ' + field.value.lng + '}' : '') + ')});</script>';
   case 'multiple_choice':
     var options = field.options.reduce(function (memo, el) {
           return memo + '<option value="' + el + '">' + el + '</option>';
