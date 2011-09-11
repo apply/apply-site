@@ -69,7 +69,7 @@ STATIC.renderField = function (field) {
   case 'rich_text':
     return '<div class="rich_text">' + field.value + '</div>';
   case 'date':
-    return '<div class="date">' + field.value + '</div>';
+    return '<div class="date">' + STATIC.humanizeDate(field.value) + '</div>';
   case 'duration':
     return '<div class="duration">' + field.value + '</div>';
   case 'number':
@@ -155,8 +155,28 @@ STATIC.renderFormField = function (field, value) {
   };
 };
 
-STATIC.renderFilters = function (fields) {
+STATIC.humanizeDate = function (date, from) {
+  var _date = require('underscore.date');
+  if (date === from) {
+    return 'today';
+  } else {
+    return _date(date).from(from || _date());
+  }
+};
+
+STATIC.print = function (field) {
+  switch (field.type) {
+  case 'date':
+    return STATIC.humanizeDate(field.value);
+  default:
+    return field.value;
+  }
+};
+
+STATIC.renderFilters = function (fields, data) {
   var html;
+
+  data = data || {};
 
   fields = fields.filter(function (field) {
     return ['short_text', 'rich_text'].indexOf(field.type) === -1;
@@ -166,7 +186,7 @@ STATIC.renderFilters = function (fields) {
   if (fields.length) {
     html += '<a class="arrow" href="#"></a>';
   }
-  html += '<input type="text" />';
+  html += '<input type="text" name="search[full_text]" value="' + (data.full_text || '') + '" />';
   html += '</div>';
 
   html += '<fieldset id="advanced">';

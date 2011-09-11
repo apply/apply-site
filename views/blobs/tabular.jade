@@ -2,6 +2,7 @@
 - var fields = self.filterFields(self.items[0], ['short_text', acceptable, acceptable, acceptable, acceptable])
 
 h1= self.blob.name
+a.button.create(href= '/blobs/' + self.blob.id + '/items/create') Create a #{self.blob.itemName}
 
 != self.renderFilters(fields)
 
@@ -17,5 +18,7 @@ table
     - each item in self.items
       - var fields = self.filterFields(item, ['short_text', acceptable, acceptable, acceptable, acceptable])
       tr
-        - each field in fields
-          td= field.value
+        td
+          a(href= '/items/' + item.id)= self.print(fields[0])
+        - each field in fields.slice(1)
+          td= self.print(field)

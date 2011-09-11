@@ -2,6 +2,7 @@
 - var fields = self.filterFields(self.items[0], ['short_text', acceptable])
 
 h1= self.blob.name
+a.button.create(href= '/blobs/' + self.blob.id + '/items/create') Create a #{self.blob.itemName}
 
 != self.renderFilters(fields)
 
@@ -9,6 +10,6 @@ ul.grid
   - each item, i in self.items
     - var fields = self.filterFields(item, ['short_text', acceptable])
     li(class= i % 5 === 0 ? 'first' : '')
-      a(href= '/blobs/' + self.blob.id + '/items/' + item.id)
+      a(href= '/items/' + item.id)
         = self.truncate(fields[0].value, 30)
       p= self.truncate(fields[1].value, 120)
