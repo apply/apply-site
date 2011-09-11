@@ -8,8 +8,8 @@ jQuery.fn.file = function(fn) {
 			filter:'alpha(opacity: 0)',
 			opacity:'0',
 			zoom:'1',
-			width:el.width()+'px',
-			height:el.height()+'px',
+			width:el.outerWidth()+'px',
+			height:el.innerHeight()+'px',
 			'z-index':1
 		});	
 
