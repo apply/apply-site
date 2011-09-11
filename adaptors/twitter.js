@@ -3,11 +3,16 @@ var common = require('common');
 var host = 'localhost:8888';
 var tweep = 'hackdisrupt';
 
+var strip = function(st) {
+	return str.replace(/<.*?>/g, '');
+};
+
 common.step([
 	function(next) {
 		curly.post(host + '/api/blobs').json({
 		    name: 'TC Hackathon Tweets',
 		    itemName: 'tweet',
+		    view : 'grid',
 		    types : [
 		        {
 		            name: 'Text',
@@ -49,34 +54,26 @@ common.step([
 				fields : [
 			        {
 			            name: 'Text',
-			            type: 'rich_text',
-			            value: tweet.text
+			            value: strip(tweet.text)
 			        },
 			        {
 			            name: 'Source',
-			            type: 'short_text',
-			            value: tweet.source
+			            value: strip(tweet.source)
 			        },
 			        {
 			            name: 'Date',
-			            type: 'date',
 			            value: new Date(tweet.created_at).getTime()
 			        },
 			        {
 			        	name: 'Favorited',
-			            type: 'single_choice',
-			            options: ['yes','no'],
 			            value: tweet.favorited ? 'yes' : 'no'
 			        },
 			        {
 			        	name: 'Retweeted',
-			            type: 'single_choice',
-			            options: ['yes','no'],
 			            value: tweet.retweeted ? 'yes' : 'no'
 			        },
 			        {
 			            name: 'Retweet count',
-		                type: 'number',
 			            value: tweet.retweet_count
 			        }
 			    ]
@@ -84,8 +81,10 @@ common.step([
 		});
 		
 		tweets.forEach(function(tweet) {
+			console.log('importing: ', tweet);
 			curly.post('{host}/api/blobs/{blob}/items', {host: host, blob: id}).json(tweet, next.parallel());
 		});
+		curly.post('{host}/api/blobs/{blob}/view', {host: host, blob: id}).json({view:'grid'}, next.parallel());
 	},
 	function() {
 		console.log('tweets imported at', this.id);
