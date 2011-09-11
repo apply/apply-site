@@ -54,10 +54,8 @@ var filterFields = function (item, types) {
   }, []);
 };
 
-var markupField = function(fields) {
-  [ { "name": "Location", "type": "location", "value": { "lat": 37.993898, "lng": -122.320799 } }, { "name": "Name", "type": "short_text", "value": "Harbour Way Elementary Community Day School" } ]
-
-  var markup = '';  
+var markupField = function(fields, item) {
+  var markup = '';
   fields.forEach(function(field) {
 
     switch(field.type) {
@@ -69,6 +67,8 @@ var markupField = function(fields) {
       break;
     }     
   });
+
+  markup += '<a href="/items/' + item.id + '">more details</a>';
 
   return markup;
 };
@@ -93,9 +93,9 @@ $(function() {
       position: latLng
     });
 
-  marker.infowindow = new google.maps.InfoWindow({
-    content: markupField(fields)
-  }); 
+    marker.infowindow = new google.maps.InfoWindow({
+      content: markupField(fields, item)
+    }); 
 
   markers.push(marker);
 
