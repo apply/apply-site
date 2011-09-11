@@ -69,7 +69,7 @@ STATIC.renderField = function (field) {
   case 'rich_text':
     return '<div class="rich_text">' + field.value + '</div>';
   case 'date':
-    return '<div class="date">' + field.value + '</div>';
+    return '<div class="date">' + STATIC.humanizeDate(field.value) + '</div>';
   case 'duration':
     return '<div class="duration">' + field.value + '</div>';
   case 'number':
@@ -153,6 +153,24 @@ STATIC.renderFormField = function (field, value) {
     return '<label for="' + id + '">' + field.name + '</label>'
          + '<input class="url" type="url" id="' + id + '" name="item[' + name + ']" value="' + value + '" />';
   };
+};
+
+STATIC.humanizeDate = function (date, from) {
+  var _date = require('underscore.date');
+  if (date === from) {
+    return 'today';
+  } else {
+    return _date(date).from(from || _date());
+  }
+};
+
+STATIC.print = function (field) {
+  switch (field.type) {
+  case 'date':
+    return STATIC.humanizeDate(field.value);
+  default:
+    return field.value;
+  }
 };
 
 STATIC.renderFilters = function (fields, data) {

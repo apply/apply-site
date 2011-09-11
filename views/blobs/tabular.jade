@@ -18,5 +18,7 @@ table
     - each item in self.items
       - var fields = self.filterFields(item, ['short_text', acceptable, acceptable, acceptable, acceptable])
       tr
-        - each field in fields
-          td= field.value
+        td
+          a(href= '/items/' + item.id)= self.print(fields[0])
+        - each field in fields.slice(1)
+          td= self.print(field)
