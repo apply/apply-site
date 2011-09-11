@@ -7,7 +7,7 @@ h1 Create item
 form(action= '/blobs/' + blob._id + '/items', method= 'POST')
   fieldset
     - each type in blob.types
-      != self.renderFormField(type, self.getField(item, type.name).value)
+      != self.renderFormField(type, self.getFieldByName(item, type.name).value)
 
   .operations
     input.button(type= 'submit', value= 'Create')

@@ -1,12 +1,9 @@
-- // HARDCODED
-- var blob = {_id: 12, name: 'People'}
-- var fields = ['Name', 'Description']
-- var items = [{_id: 1, fields: [{name: 'Name', value: 'Pau Ramon', type: 'short_text'}, {name: 'Description', value: 'Lorem Ipsum crap', type: 'rich_text'}]}]
-
-h1= blob.name
+h1= self.blob.name
 
 ul.grid
-  - each item in items
-    li
-    - each field in fields
-      div(class= self.getField(item, field).type)= self.getField(item, field).value
+  - each item, i in self.items
+    - var fields = self.filterFields(item, ['short_text', 'rich_text'])
+    li(class= i % 5 === 0 ? 'first' : '')
+      a(href= '/blobs/' + self.blob.id + '/items/' + item.id)
+        = self.truncate(self.getFieldByName(item, fields[0].name).value, 30)
+      p= self.truncate(self.getFieldByName(item, fields[1].name).value, 120)

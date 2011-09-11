@@ -27,17 +27,18 @@ function render(location, locals) {
   }
 }
 
-function renderView(location) {
-	return 	function(request, response) {
+function renderView(location, locals) {
+  return function(request, response) {
 		common.step([
 			function(next) {
-				curly.get('localhost:' + port + '/api/blob/{blob}', request.params).json(next.parallel());
-				curly.get('localhost:' + port + '/api/blob/{blob}/items', request.params).json(next.parallel());
+				curly.get('localhost:' + port + '/api/blobs/{blob}', request.params).json(next.parallel());
+				curly.get('localhost:' + port + '/api/blobs/{blob}/items', request.params).json(next.parallel());
 			},
 			function(result) {
-				var blob = result[0];
-				var items = result[1];
-				render(location,{item: item, blob: blob})(request, response);
+        locals = common.join(locals, {items: result[1], blob: result[0]}) || {};
+        locals.css = locals.css || [];
+        locals.css.push('/blobs/' + result[0].view);
+				render(location, locals)(request, response);
 			}
 		], function(err) {
 			bark.jade('./views/404.jade')(request, response);	
@@ -80,10 +81,10 @@ server.get('/blobs/{blob}', function(request, response) {
 		bark.jade('./jade/404.jade')(request, response);
 	});
 });
-server.get('/blobs/{blob}/grid', renderView('./views/blobs/grid.jade'));
-server.get('/blobs/{blob}/tabular', renderView('./views/blobs/tabular.jade'));
-server.get('/blobs/{blob}/map', renderView('./views/blobs/map.jade'));
-server.get('/blobs/{blob}/gallery', renderView('./views/blobs/gallery.jade'));
+server.get('/blobs/{blob}/grid', renderView('./views/blobs/grid.jade', {css: ['blobs/grid']}));
+server.get('/blobs/{blob}/tabular', renderView('./views/blobs/tabular.jade', {css: ['blobs/tabular']}));
+server.get('/blobs/{blob}/map', renderView('./views/blobs/map.jade', {css: ['blobs/map']}));
+server.get('/blobs/{blob}/gallery', renderView('./views/blobs/gallery.jade', {css: ['blobs/gallery']}));
 
 // items
 server.get('/blobs/{blob_id}/items/create', render('./views/blobs/items/create.jade'));

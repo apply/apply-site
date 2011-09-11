@@ -1,26 +1,26 @@
 - // HARDCODED
 - var blob = {_id: 12}
-- var canUseVisualization = function () {return true;}
+- var canUseView = function () {return true;}
 
 h1
   span Definition
-  span.active &raquo; Visualization
+  span.active &raquo; View
 
 .box.warning Choose a template to represent your blob
 
 form(href= '/api/blobs/' + blob._id + '/view', method= 'POST')
 
   - // HARDCODED
-  - var visualizations = ['grid', 'tabular', 'map', 'gallery']
+  - var views = ['grid', 'tabular', 'map', 'gallery']
 
   - var descriptions = {grid: 'The OpenType versions of Pacifico and Pacifico Alternate use ligature features to substitute unique glyphs when any upper or lower case character is keyed twice in a row.', tabular: 'The OpenType versions of Pacifico and Pacifico Alternate use ligature features to substitute unique glyphs when any upper or lower case character is keyed twice in a row.', map: 'The OpenType versions of Pacifico and Pacifico Alternate use ligature features to substitute unique glyphs when any upper or lower case character is keyed twice in a row.', gallery: 'The OpenType versions of Pacifico and Pacifico Alternate use ligature features to substitute unique glyphs when any upper or lower case character is keyed twice in a row.'}
 
   ul
-    - each visualization in visualizations
-      li.visualization
-        img(src= '/images/visualizations/' + visualization + '.png', alt= visualization)
-        input.radio(type= 'radio', value= visualization, name= 'blob[visualization]')
-        strong= visualization.replace('_', ' ').replace(/^\w/, function($0) { return $0.toUpperCase(); })
-        p= descriptions[visualization]
+    - each view in views
+      li.view
+        img(src= '/images/views/' + view + '.png', alt= view)
+        input.radio(type= 'radio', value= view, name= 'blob[view]')
+        strong= view.replace('_', ' ').replace(/^\w/, function($0) { return $0.toUpperCase(); })
+        p= descriptions[view]
 
         input.button(type= 'submit', value= 'Choose')
