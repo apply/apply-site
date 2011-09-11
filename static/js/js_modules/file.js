@@ -15,10 +15,11 @@ module.exports = function(selector, map) {
 	map.select = map.select || noop;
 
 	$(selector).file(function(input) {
+		var filename = $(input).val().split('/').pop().split('\\').pop();
 		var name = Math.random().toString(36).substr(2) + '.' + $(input).val().split('.').pop().toLowerCase();
 		var url = 'http://'+host+'/api/file/'+name;
 
-		map.select(url);
+		map.select(url, filename);
 
 		var iframe = $('<iframe name="'+name+'" id="'+name+'"></iframe>').hide().appendTo('body');
 		var form = $('<form target="'+name+'" method="POST" enctype="multipart/form-data" action="'+url+'"></form>')
@@ -35,7 +36,7 @@ module.exports = function(selector, map) {
 				iframe.remove();
 			}, 500);
 
-			map.upload(url);
+			map.upload(url, filename);
 		});
 	});
 };
