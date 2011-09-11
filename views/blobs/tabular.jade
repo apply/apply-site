@@ -3,6 +3,15 @@
 
 h1= self.blob.name
 
+#filters
+  #full_text
+    a.arrow(href= '#')
+    input(type= 'text', placeholder= 'Searching')
+  #advanced
+    - each field in fields
+      .field
+        != self.renderFormField(field)
+
 table
   tr
   - each field in fields

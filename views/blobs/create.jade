@@ -1,6 +1,6 @@
 h1
-  span.active Definition
-  span &raquo; Visualization
+  span Definition 
+  span.inactive &raquo; Visualization
 
 .box.warning A blob is a collection
 
@@ -27,8 +27,8 @@ form(href= '', id= 'creator', method= 'POST')
       li.type
         img.type(src= '/images/types/short_text.png', alt= 'Short text')
         span.value
-        input.type(type= 'hidden', name= 'blob[items][0][type]', value= 'short_text')
-        input.value(type= 'text', name= 'blob[items][0][value]', value= '')
+        input.type(type= 'hidden', name= 'blob[items][type]', value= 'short_text')
+        input.value(type= 'text', name= 'blob[items][value]', value= '')
     input.submit(type= 'submit', value= 'Next')
   .clearer
 

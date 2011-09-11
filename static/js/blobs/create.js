@@ -32,7 +32,7 @@ $(function () {
     return false;
   });
 
-  $('fieldset.types_to li.type').sortable();
+  $('fieldset.types_to ul').sortable({handle: 'img.drag', opacity: 0.8});
 
   $('fieldset.types_from li.type a').click(function () {
     var $this = $(this)
