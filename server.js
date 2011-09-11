@@ -65,7 +65,7 @@ server.get('/', render('./views/index.jade', {css: ['index']}));
 server.get('/blobs/create', render('./views/blobs/create.jade',{types: types, css: ['blobs/create']}));
 
 // select view
-server.get('/blobs/{id}/view', render('./views/blobs/view.jade'));
+server.get('/blobs/{id}/view', render('./views/blobs/view.jade', {css: ['blobs/view']}));
 
 // blob view
 server.get('/blobs/{blob}', function(request, response) {

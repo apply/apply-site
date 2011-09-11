@@ -13,10 +13,14 @@ form(href= '/api/blobs/' + blob._id + '/view', method= 'POST')
   - // HARDCODED
   - var visualizations = ['grid', 'tabular', 'map', 'gallery']
 
-  fieldset.types_from(class= canUseVisualization ? 'enabled' : 'disabled')
-    - each visualization in visualizations
-      a(href='#', class= visualizations)
-        img(src= '/static/images/visualizations/' + visualization, alt= visualization)
-        = visualization.replace('_', ' ').replace(/^\w/, function($0) { return $0.toUpperCase(); })
+  - var descriptions = {grid: 'The OpenType versions of Pacifico and Pacifico Alternate use ligature features to substitute unique glyphs when any upper or lower case character is keyed twice in a row.', tabular: 'The OpenType versions of Pacifico and Pacifico Alternate use ligature features to substitute unique glyphs when any upper or lower case character is keyed twice in a row.', map: 'The OpenType versions of Pacifico and Pacifico Alternate use ligature features to substitute unique glyphs when any upper or lower case character is keyed twice in a row.', gallery: 'The OpenType versions of Pacifico and Pacifico Alternate use ligature features to substitute unique glyphs when any upper or lower case character is keyed twice in a row.'}
 
-      input(type= 'submit', value= 'Choose')
+  ul
+    - each visualization in visualizations
+      li.visualization
+        img(src= '/images/visualizations/' + visualization + '.png', alt= visualization)
+        input.radio(type= 'radio', value= visualization, name= 'blob[visualization]')
+        strong= visualization.replace('_', ' ').replace(/^\w/, function($0) { return $0.toUpperCase(); })
+        p= descriptions[visualization]
+
+        input.button(type= 'submit', value= 'Choose')
