@@ -60,15 +60,13 @@ var markupField = function(fields, item) {
 
     switch(field.type) {
       case 'short_text':
-        markup += '<p>' + field.value + '</p>';
+        markup += '<a href="/items/' + item.id  + '">' + field.value + '</a>';
       break;
       case 'picture':
         markup += '<img src="' + field.value + '" style="widht:100px">';
       break;
     }     
   });
-
-  markup += '<a href="/items/' + item.id + '">more details</a>';
 
   return markup;
 };
@@ -77,7 +75,7 @@ $(function() {
   var mapDiv = document.getElementById('map-canvas');
   var map = new google.maps.Map(mapDiv, {
     center: new google.maps.LatLng(37.77199, -122.40366),
-    zoom: 14,
+    zoom: 13,
     mapTypeId: google.maps.MapTypeId.TERRAIN
   });
   var markers = [];
