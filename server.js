@@ -43,6 +43,20 @@ function renderView(location) {
 	}
 };
 
+function renderItem(location) {
+	return function(request, response) {
+		common.step([
+			function(next) {
+				curly.get('/api/items/{item}', reuquest.params).json(next);
+			},
+			function(item) {
+				bark.jade(location, {item: item})(request, response);
+			}
+		], function(err) {
+			bark.jade('./jade/404.jade')(request, response);
+		});
+	}
+}
 server.get('/', render('./views/index.jade'));
 
 // create blob
@@ -59,9 +73,9 @@ server.get('/blobs/{blob}/map', renderView('./views/blobs/map.jade'));
 server.get('/blobs/{blob}/gallery', renderView('./views/blobs/gallery.jade'));
 
 // items
-server.get('/blobs/{blob}/items/create', echo);
-server.get('/items/{item}', echo);
-server.get('/items/{item}/edit', echo);
+server.get('/blobs/{blob}/items/create', render('./views/items/create.jade'));
+server.get('/items/{item}', renderItem('./view/items/item.jade'));
+server.get('/items/{item}/edit', renderItem('./view/items/edit.jade')););
 
 api.listen(server);
 
