@@ -116,8 +116,8 @@ exports.listen = function(server) {
 			var type = map[field.name];
 
 			if (type.type === 'location') {
-        field.value = {lat: (field.value || '').split(';')[0], lng: (field.value || '').split(';')[1]};
-      }
+		        field.value = {lat: (field.value + '').split(';')[0], lng: (field.value + '').split(';')[1]};
+		      }
 
 			if (type.options) {
 				field.options = type.options;
