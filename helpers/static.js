@@ -155,8 +155,10 @@ STATIC.renderFormField = function (field, value) {
   };
 };
 
-STATIC.renderFilters = function (fields) {
+STATIC.renderFilters = function (fields, data) {
   var html;
+
+  data = data || {};
 
   fields = fields.filter(function (field) {
     return ['short_text', 'rich_text'].indexOf(field.type) === -1;
@@ -166,7 +168,7 @@ STATIC.renderFilters = function (fields) {
   if (fields.length) {
     html += '<a class="arrow" href="#"></a>';
   }
-  html += '<input type="text" />';
+  html += '<input type="text" name="search[full_text]" value="' + (data.full_text || '') + '" />';
   html += '</div>';
 
   html += '<fieldset id="advanced">';
