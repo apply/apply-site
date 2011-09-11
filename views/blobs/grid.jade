@@ -1,8 +1,10 @@
+- var acceptable = ['short_text', 'rich_text', 'date', 'duration', 'number', 'multiple_choice', 'single_choice'];
+
 h1= self.blob.name
 
 ul.grid
   - each item, i in self.items
-    - var fields = self.filterFields(item, ['short_text', 'rich_text'])
+    - var fields = self.filterFields(item, ['short_text', acceptable])
     li(class= i % 5 === 0 ? 'first' : '')
       a(href= '/blobs/' + self.blob.id + '/items/' + item.id)
         = self.truncate(self.getFieldByName(item, fields[0].name).value, 30)

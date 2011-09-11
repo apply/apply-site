@@ -46,7 +46,7 @@ var types = ['short_text', 'rich_text', 'date', 'duration', 'number', 'picture',
 
 var mapping = {
 	map: ['location'],
-	grid: ['short_text', 'rich_text', 'date', 'duration', 'number', 'file', 'multiple_choice', 'single_choice', 'link'],
+	grid: ['short_text', 'rich_text', 'date', 'duration', 'number', 'multiple_choice', 'single_choice'],
 	gallery: ['picture'],
 	tabular: ['short_text', 'date', 'duration', 'number', 'multiple_choice', 'single_choice', 'link']
 };
