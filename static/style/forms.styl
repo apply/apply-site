@@ -1,0 +1,48 @@
+form
+  width: 100%
+
+  fieldset
+    margin: 0
+    padding: 0
+    border: none
+    margin-bottom: 20px
+
+  h2
+    margin-bottom: 20px
+
+  .field
+    margin: 0px 0px 20px 0px
+
+    &.inline
+      display: inline-block
+      margin-right: 80px
+
+  label
+    display: block
+    cursor: pointer
+    margin-bottom: 5px
+
+    input[type="checkbox"]
+      vertical-align: top
+
+  input,
+  textarea
+    box-shadow: 1px 1px 1px lighten($p_light, 5) inset
+    border: 1px solid $p_light
+    padding: 7px 10px
+    font-size: 11pt
+    color: $p_dark
+
+    &:hover
+      border-color: $p_dark
+
+    &:focus
+      border-color: $p_dark
+
+  textarea
+    width: 468px
+
+  .operations
+    width: $fieldset-width
+    text-align: right
+    margin-bottom: 20px
