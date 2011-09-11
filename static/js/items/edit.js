@@ -9,7 +9,7 @@ $(function () {
     var id = window.location.pathname.split('/')[2];
 
     if (marker) {
-      data += '&item[Location]=' + marker.getPosition().Pa + ';' + marker.getPosition().Qa;    
+      data += '&item[' + $('#map').prev().text() + ']=' + marker.getPosition().Pa + ';' + marker.getPosition().Qa;    
     }
 
     $.ajax({
