@@ -106,7 +106,7 @@ module.exports.listen = function (server) {
    *
    * Error Codes
    * ===========
-   * 400 Malformed or missing blob.
+   * 400 Malformed or missing update.
    * 403 TODO: Operation attempted not allowed by user type (private blob).
    * 404 Blob not found.
    */
@@ -220,7 +220,7 @@ module.exports.listen = function (server) {
    *
    * Parameter(s)
    * ============
-   * item - object representing the item to be inserted
+   * item - object representing the item to be updated
    *
    * Returns
    * =======

@@ -7,18 +7,18 @@ BLOB.mapping = { map: ['location']
                , gallery: ['picture']
                , tabular: ['short_text', 'date', 'duration', 'number', 'multiple_choice', 'single_choice', 'link']
                };
+BLOB.required = {name: 1, itemName: 1, types: 1};
 
 /**
  * Finds a blob with a given id
  *
  * @param {String} blobId
  * @param {Function} callback
- * @return {Object}
  */
 BLOB.findById = function (blobId, callback) {
   APP.db.blobs.findOne({id: blobId}, {_id: 0}, function (error, data) {
     if (error) {
-      callback([500, error]);
+      callback(error);
     } else {
       if (data) {
         callback(null, data);
@@ -27,80 +27,84 @@ BLOB.findById = function (blobId, callback) {
       }
     }
   });
+};
 
-  return BLOB;
-}
+/**
+ * Get available views for a blob
+ *
+ * @param {Object} blob
+ * @return {Array}
+ */
+BLOB.getAvailableViews = function (blob) {
+  var availableViews = [], view, i;
+
+  for (view in BLOB.mapping) {
+    for (i = 0; i < blob.types.length; i++) {
+      if (BLOB.mapping[view].indexOf(blob.types[i].type) > -1) {
+        availableViews.push(view);
+        break;
+      }
+    }
+  }
+  return availableViews;
+};
 
 /**
  * Creates a blob
  *
  * @param {Object} blob
  * @param {Function} callback
- * @return {Object}
  */
 BLOB.create = function (blob, callback) {
-  var view, i;
-
-  if (!blob || BLOB.validate(blob, {name: 1, itemName: 1, types: 1})) {
+  if (!blob || !BLOB.validate(blob, BLOB.required)) {
     return callback([400, Error('Missing or malformed blob')]);
   }
 
   blob.id = BLOB.id();
-  blob.createdAt = BLOB.now();
-  blob.availableViews = [];
-
-  for (view in BLOB.mapping) {
-    for (i = 0; i < blob.types.length; i++) {
-      if (BLOB.mapping[view].indexOf(blob.types[i].type) > -1) {
-        blob.availableViews.push(view);
-        break;
-      }
-    }
-  }
+  blob.updatedAt = blob.createdAt = BLOB.now();
+  blob.availableViews = BLOB.getAvailableViews(blob);
 
   APP.db.blobs.save(blob, function (error, _) {
     if (error) {
-      callback([500, error]);
+      callback(error);
     } else {
-      delete blob._id;
-      callback(blob);
+      callback(null, blob);
     }
   });
-
-  return BLOB;
 };
 
 /**
  * Updates a blob
  *
  * @param {String} blobId
- * @param {Object} blob
+ * @param {Object} update
  * @param {Function} callback
- * @return {Object}
  */
-BLOB.update = function (blobId, blob, callback) {
-  var update = common.join(blob, {updatedAt: BLOB.now()});
+BLOB.update = function (blobId, update, callback) {
+  if (!update || !BLOB.validate(update, BLOB.required)) {
+    return callback([400, Error('Missing or malformed blob update')]);
+  }
+
+  update = common.join(update, {updatedAt: BLOB.now()});
 
   common.step([
     function (next) {
       APP.model('blob').findById(blobId, next);
     },
     function (blob) {
-      if (!blob || BLOB.validate(blob, {name: 1, itemName: 1, types: 1})) {
-        return callback([400, Error('Missing or malformed blob')]);
+      if (!blob) {
+        return callback([404, Error('Blob not found')]);
       }
 
       APP.db.blobs.update({id: blobId}, {$set: update}, function (error) {
         if (error) {
-          callback([500, error]);
+          callback(error);
         } else {
-          callback(blob);
+          callback(null, blob);
         }
       });
     }
   ], callback);
-
-  return BLOB;
 };
 
 module.exports = BLOB;
