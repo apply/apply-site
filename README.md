@@ -22,6 +22,11 @@ Create your apps, manage your data and display it in a beatiful way.
     fields [
       {type, name, value}
     ]
+    blob {
+      id
+      name
+      itemName
+    }
     createdAt
     updatedAt
 
