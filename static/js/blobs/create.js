@@ -50,7 +50,7 @@ $(function () {
 
     var name = klass.replace('_', ' ').replace(/^\w/, function($0) { return $0.toUpperCase(); });
     $cloned_img.attr('src', $cloned_img.attr('src').replace(/(\/images\/types\/).*?(\.png)/, '$1' + klass + '$2'));
-    
+
     if(['single_choice','multiple_choice'].indexOf(klass) > -1) {
       $cloned.append('<input type="text" placeholder="Comma separated choices" name="blob[items][choices]" class="choices" />');
     }

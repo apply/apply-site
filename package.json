@@ -1,0 +1,35 @@
+{
+  "name": "Apply.io",
+  "description": "Spreadsheets evolved",
+  "version": "0.0.1",
+  "contributors": [
+      {"name": "Ian", "email": "i@ge.tt"},
+      {"name": "Pau", "email": "masylum@gmail.com"},
+      {"name": "Mathias", "email": "m@ge.tt"}
+  ],
+  "private": true,
+  "main": "./server",
+  "dependencies": {
+    "bark": "0.1.2",
+    "buffoon": "0.1.3",
+    "colors": "0.5.0",
+    "common": "0.2.1",
+    "curly": "0.2.5",
+    "jade": "0.15.4",
+    "jsonize": "0.1.0",
+    "mime": "1.2.3",
+    "mongojs": "0.2.1",
+    "pubsub.io": "0.2.0",
+    "rex": "0.3.2",
+    "router": "0.4.1",
+    "stylus": "0.15.2",
+    "underscore.date": "0.5.2",
+    "xml2json": "0.2.3"
+  },
+  "devDependencies": {
+    "testosterone": "1.2.0",
+    "gently": "0.9.1"
+  },
+  "repository" : {"type": "git" , "url": "https://github.com/apply/apply-site" },
+  "engines": { "node": "0.4.10" }
+}
