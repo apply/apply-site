@@ -223,4 +223,80 @@ testosterone
     Item.update(blobId, itemId, item, callback);
   })
 
+  .add('`list` retrieves a list of items from db', function () {
+    var options = {blobId: 42}
+      , callback = noop;
+
+    gently.expect(APP.db.items, 'find', function (_query, _fields, _cb) {
+      assert.deepEqual(_query, {blobId: 42});
+      assert.deepEqual(_fields, {_id: 0});
+      assert.deepEqual(_cb, callback);
+    });
+    Item.list(options, callback);
+  })
+
+  .add('`findById` retrieves a single item with the given id', function () {
+    var blobId = 42
+      , itemId = 37
+      , blob = {zemba: 'fleiba', id: 'foo'}
+      , item = {foo: 'bar'}
+      , callback;
+
+    // error
+    gently.expect(APP.model('blob'), 'findById', function (_blobId, _cb) {
+      assert.equal(_blobId, blobId);
+      _cb(Error('foo'));
+    });
+    callback = gently.expect(function (error) {
+      assert.ok(error);
+    });
+    Item.findById(blobId, itemId, callback);
+
+    // error2
+    gently.expect(APP.model('blob'), 'findById', function (_blobId, _cb) {
+      assert.equal(_blobId, blobId);
+      _cb(null, blob);
+    });
+    gently.expect(APP.db.items, 'findOne', function (_query, _fields, _cb) {
+      assert.deepEqual(_query, {id: itemId, blobId: blob.id});
+      assert.deepEqual(_fields, {_id: 0});
+      _cb(Error('fooo'));
+    });
+    callback = gently.expect(function (error) {
+      assert.ok(error);
+    });
+    Item.findById(blobId, itemId, callback);
+
+    // No item found
+    gently.expect(APP.model('blob'), 'findById', function (_blobId, _cb) {
+      assert.equal(_blobId, blobId);
+      _cb(null, blob);
+    });
+    gently.expect(APP.db.items, 'findOne', function (_query, _fields, _cb) {
+      assert.deepEqual(_query, {id: itemId, blobId: blob.id});
+      assert.deepEqual(_fields, {_id: 0});
+      _cb(null, null);
+    });
+    callback = gently.expect(function (error) {
+      assert.equal(error[0], 404);
+    });
+    Item.findById(blobId, itemId, callback);
+
+    // Ok
+    gently.expect(APP.model('blob'), 'findById', function (_blobId, _cb) {
+      assert.equal(_blobId, blobId);
+      _cb(null, blob);
+    });
+    gently.expect(APP.db.items, 'findOne', function (_query, _fields, _cb) {
+      assert.deepEqual(_query, {id: itemId, blobId: blob.id});
+      assert.deepEqual(_fields, {_id: 0});
+      _cb(null, item);
+    });
+    callback = gently.expect(function (error, _item) {
+      assert.ifError(error);
+      assert.deepEqual(_item, item);
+    });
+    Item.findById(blobId, itemId, callback);
+  })
+
   .run();

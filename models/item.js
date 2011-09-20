@@ -107,31 +107,31 @@ ITEM.update = function (blobId, itemId, item, callback) {
  * @return {Object}
  */
 ITEM.list = function (options, callback) {
-  var search = options['search[full_text]'];
+  //var search = options['search[full_text]'];
 
   // TODO: Refucktor this, elastic search please
-  if (search) {
-    common.step([
-      function (next) {
-        APP.db.items.find({blobId: options.blobId}, {_id: 0}, next);
-      },
-      function (items) {
-        var is = [];
-        items.forEach(function (item) {
-          item.fields.some(function (field) {
-            var found = (field.value + '').toLowerCase().indexOf(search.toLowerCase()) > -1;
-            if (found) {
-              is.push(item);
-            }
-            return found;
-          });
-        });
-        callback(null, is);
-      }
-    ], callback);
-  } else {
+  //if (search) {
+  //  common.step([
+  //    function (next) {
+  //      APP.db.items.find({blobId: options.blobId}, {_id: 0}, next);
+  //    },
+  //    function (items) {
+  //      var is = [];
+  //      items.forEach(function (item) {
+  //        item.fields.some(function (field) {
+  //          var found = (field.value + '').toLowerCase().indexOf(search.toLowerCase()) > -1;
+  //          if (found) {
+  //            is.push(item);
+  //          }
+  //          return found;
+  //        });
+  //      });
+  //      callback(null, is);
+  //    }
+  //  ], callback);
+  //} else {
     APP.db.items.find({blobId: options.blobId}, {_id: 0}, callback);
-  }
+  //}
 };
 
 /**
@@ -148,7 +148,7 @@ ITEM.findById = function (blobId, itemId, callback) {
     function (blob) {
       APP.db.items.findOne({id: itemId, blobId: blob.id}, {_id: 0}, function (error, data) {
         if (error) {
-          callback([500, error]);
+          callback(error);
         } else {
           if (data) {
             callback(null, data);
