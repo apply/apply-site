@@ -23,7 +23,7 @@ ITEM.normalize = function (blob, item) {
   item.fields = item.fields.map(function (field) {
     var type = map[field.name];
 
-    if (type.type === 'location') {
+    if (type.type === 'location' && field.value) {
       field.value = {lat: field.value.split(';')[0], lng: field.value.split(';')[1]};
     }
 
@@ -37,7 +37,7 @@ ITEM.normalize = function (blob, item) {
   });
 
   return item;
-}
+};
 
 /**
  * Creates an item
@@ -45,7 +45,6 @@ ITEM.normalize = function (blob, item) {
  * @param {Object} item
  * @param {String} blobId
  * @param {Function} callback
- * @return {Object}
  */
 ITEM.create = function (item, blobId, callback) {
   item.blobId = blobId;
@@ -61,23 +60,15 @@ ITEM.create = function (item, blobId, callback) {
         return callback([404, new Error('Blob not found')]);
       }
 
-      item = normalize(blob, item);
+      item = ITEM.normalize(blob, item);
 
-      if (!item || ITEM.validate(item, {fields: 1})) {
-        return callback([400, new Error('Missing item or malformed')]);
+      if (!item || !ITEM.validate(item, {fields: 1})) {
+        return callback([400, new Error('Missing or malformed item')]);
       }
 
-      APP.db.items.save(item, function (error) {
-        if (error) {
-          callback([500, error]);
-        } else {
-          callback(null, item);
-        }
-      });
+      APP.db.items.save(item, callback);
     }
   ], callback);
-
-  return ITEM;
 };
 
 /**
@@ -87,7 +78,6 @@ ITEM.create = function (item, blobId, callback) {
  * @param {String} itemId
  * @param {Object} item
  * @param {Function} callback
- * @return {Object}
  */
 ITEM.update = function (blobId, itemId, item, callback) {
   common.step([
@@ -95,20 +85,16 @@ ITEM.update = function (blobId, itemId, item, callback) {
       APP.model('blob').findById(blobId, next);
     },
     function (blob) {
-      item = normalize(blob, item);
+      item = ITEM.normalize(blob, item);
 
-      if (!item || ITEM.validate(item, {fields: 1})) {
+      if (!item || !ITEM.validate(item, {fields: 1})) {
         return callback([400, Error('Missing or malformed item')]);
       }
 
+      var update = common.join(item, {updatedAt: ITEM.now()});
+
       // TODO: pubsub.publish(item);
-      APP.db.items.update({id: itemId}, {$set: {fields: item.fields, updatedAt: ITEM.now()}}, function (error) {
-        if (error) {
-          callback([500, error]);
-        } else {
-          callback(item);
-        }
-      });
+      APP.db.items.update({id: itemId}, {$set: update}, callback);
     }
   ], callback);
 };
@@ -146,16 +132,13 @@ ITEM.list = function (options, callback) {
   } else {
     APP.db.items.find({blobId: options.blobId}, {_id: 0}, callback);
   }
-
-  return ITEM;
-}
+};
 
 /**
  * Gets a single item
  *
  * @param {Object} options
  * @param {Function} callback
- * @return {Object}
  */
 ITEM.findById = function (blobId, itemId, callback) {
   common.step([
@@ -176,6 +159,6 @@ ITEM.findById = function (blobId, itemId, callback) {
       });
     }
   ], callback);
-}
+};
 
 module.exports = ITEM;

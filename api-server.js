@@ -21,7 +21,11 @@ GLOBAL.APP = APP;
 function apiResponse(respond) {
   return function (error, data) {
     if (error) {
-      respond(error[0], error[1]);
+      if (Array.isArray(error)) {
+        respond(error[0], error[1]);
+      } else {
+        respond(500, error);
+      }
     } else {
       respond(data);
     }
