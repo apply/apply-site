@@ -12,9 +12,10 @@ Create your apps, manage your data and display it in a beatiful way.
     types [
       {type, name[, options]}
     ]
+    view
+    availableViews
     createdAt
     updatedAt
-    availableViews
 
 ### Items
 

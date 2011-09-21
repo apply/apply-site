@@ -1,22 +1,9 @@
 var jsonize = require('jsonize')
   , common = require('common')
   , curly = require('curly')
-  , dir = require('./dir')
-  , env = process.env.NODE_ENV || 'development'
-  , config = require(dir.config)[env]
-  , db = require('mongojs').connect(config.mongo.connection, config.mongo.collections)
-  , APP;
+  , dir = require('./dir');
 
-APP = {
-  db: db
-, config: config
-, env: env
-, model: function (str) {
-    return require(dir.models + '/' + str);
-  }
-};
-
-GLOBAL.APP = APP;
+GLOBAL.APP = require(dir.lib + '/app');
 
 function apiResponse(respond) {
   return function (error, data) {
@@ -87,7 +74,7 @@ module.exports.use = function (server) {
    * none
    */
   server.get('/api/blobs', jsonize(function (request, respond) {
-    db.blobs.find({}, {_id: 0}, callbackify(respond));
+    GLOBAL.APP.db.blobs.find({}, {_id: 0}, callbackify(respond));
   }));
 
   /**
@@ -156,7 +143,7 @@ module.exports.use = function (server) {
    * ===========
    * 304 TODO: Blob contents have not changed (relies on 'hash' parameter).
    * 403 TODO: Operation attempted not allowed by user type (private blob).
-   * 404 TODO: Blob not found.
+   * 404 Blob not found.
    */
   server.get('/api/blobs/{blobId}/items', jsonize(function (request, respond) {
     var options = require('url').parse(request.url, true).query;
@@ -209,7 +196,7 @@ module.exports.use = function (server) {
    * 404 Blob or Item not found.
    */
   server.get('/api/blobs/{blobId}/items/{itemId}', jsonize(function (request, respond) {
-    db.items.findById(request.params.blobId, request.params.itemId, apiResponse(respond));
+    APP.model('item').findById(request.params.blobId, request.params.itemId, apiResponse(respond));
   }));
 
   /**
@@ -241,6 +228,7 @@ module.exports.use = function (server) {
    * GET
    *
    * Gets a file
+   * TODO: File model and tests
    *
    * Parameter(s)
    * ============
@@ -260,12 +248,15 @@ module.exports.use = function (server) {
 
     common.step([
       function (next) {
-        curly.get('http://api.ge.tt/0/{0}/{1}/translate', config.gett.share, name).json(next);
+        curly.get('http://api.ge.tt/0/{0}/{1}/translate', GLOBAL.APP.config.gett.share, name).json(next);
       },
       function (file) {
         var suffix = (query.width || query.height) ? '/scale/' + (query.width || '') + 'x' + (query.height || '') : '';
 
-        curly.get('http://api.ge.tt/0/{0}/{1}/blob' + suffix, config.gett.share, file.fileid).proxy(response);
+        curly.get(
+          'http://api.ge.tt/0/{0}/{1}/blob' + suffix
+        , GLOBAL.APP.config.gett.share
+        , file.fileid).proxy(response);
       }
     ], function () {
       response.writeHead(404);
@@ -278,6 +269,7 @@ module.exports.use = function (server) {
    * POST
    *
    * Creates a file
+   * TODO: File model and tests
    *
    * Parameter(s)
    * ============
@@ -312,8 +304,8 @@ module.exports.use = function (server) {
 
     common.step([
       function (next) {
-        var query = {token: config.gett.token, filename: name};
-        curly.get('http://api.ge.tt/1/{0}/create', config.gett.share).query(query).json(next);
+        var query = {token: GLOBAL.APP.config.gett.token, filename: name};
+        curly.get('http://api.ge.tt/1/{0}/create', GLOBAL.APP.config.gett.share).query(query).json(next);
       },
       function (file) {
         delete request.headers.host;

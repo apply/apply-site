@@ -12,7 +12,7 @@ var ITEM = Object.create(require('./model'))
 ITEM.normalize = function (blob, item) {
   var map = {};
 
-  if (!blob || !item) {
+  if (!blob || !item || !item.fields) {
     return null;
   }
 
@@ -79,22 +79,32 @@ ITEM.create = function (item, blobId, callback) {
  * @param {Object} item
  * @param {Function} callback
  */
-ITEM.update = function (blobId, itemId, item, callback) {
+ITEM.update = function (blobId, itemId, update, callback) {
   common.step([
     function (next) {
       APP.model('blob').findById(blobId, next);
     },
     function (blob) {
-      item = ITEM.normalize(blob, item);
+      update = ITEM.normalize(blob, update);
 
-      if (!item || !ITEM.validate(item, {fields: 1})) {
-        return callback([400, Error('Missing or malformed item')]);
+      if (!update || !ITEM.validate(update, {fields: 1})) {
+        return callback([400, Error('Missing or malformed update')]);
       }
 
-      var update = common.join(item, {updatedAt: ITEM.now()});
+      update = common.join(update, {updatedAt: ITEM.now()});
 
       // TODO: pubsub.publish(item);
-      APP.db.items.update({id: itemId}, {$set: update}, callback);
+      APP.db.items.findAndModify({query: {id: itemId}, update: {$set: update}, 'new': true}, function (error, data) {
+        if (error && error.errmsg !== 'No matching object found') {
+          callback(error);
+        } else {
+          if (data) {
+            callback(null, data);
+          } else {
+            callback([404, Error('No item found')]);
+          }
+        }
+      });
     }
   ], callback);
 };
@@ -130,7 +140,14 @@ ITEM.list = function (options, callback) {
   //    }
   //  ], callback);
   //} else {
-    APP.db.items.find({blobId: options.blobId}, {_id: 0}, callback);
+  common.step([
+    function (next) {
+      APP.model('blob').findById(options.blobId, next);
+    },
+    function (blob) {
+      APP.db.items.find({blobId: blob.id}, {_id: 0}, callback);
+    }
+  ], callback);
   //}
 };
 

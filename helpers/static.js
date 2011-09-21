@@ -65,10 +65,10 @@ STATIC.truncate = function (str, num) {
 
 STATIC.renderField = function (field) {
   switch (field.type) {
-  case 'short_text':
-    return '<div class="short_text">' + field.value + '</div>';
-  case 'rich_text':
-    return '<div class="rich_text">' + field.value + '</div>';
+  case 'shortText':
+    return '<div class="shortText">' + field.value + '</div>';
+  case 'richText':
+    return '<div class="richText">' + field.value + '</div>';
   case 'date':
     return '<div class="date">' + STATIC.humanizeDate(field.value) + '</div>';
   case 'duration':
@@ -81,13 +81,13 @@ STATIC.renderField = function (field) {
     return '<div class="file"><a href="' + field.value + '" /></div>';
   case 'location':
     return '<div id="map" style="height:200px;"></div><script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script><script>google.maps.event.addDomListener(window, "load", function () {setMap({lat: ' + field.value.lat + ', lng: ' + field.value.lng + '})});</script>';
-  case 'multiple_choice':
+  case 'multipleChoice':
     var li = field.value.reduce(function (memo, el) {
           return memo + '<li>' + el + '</li>';
         }, '');
-    return '<div class="multi_choice"><ul>' + li + '</ul></div>';
-  case 'single_choice':
-    return '<div class="single_choice">' + field.value + '</div>';
+    return '<div class="multipleChoice"><ul>' + li + '</ul></div>';
+  case 'singleChoice':
+    return '<div class="singleChoice">' + field.value + '</div>';
   case 'link':
     return '<div class="link"><a href="' + field.value + '" /></div>';
   };
@@ -100,10 +100,10 @@ STATIC.renderFormField = function (field, value) {
   value = value || '';
 
   switch (field.type) {
-  case 'short_text':
+  case 'shortText':
     return '<label for="' + id + '">' + field.name + '</label>'
          + '<input type="text" id="' + id + '" name="item[' + name + ']" value="' + value + '" />';
-  case 'rich_text':
+  case 'richText':
     return '<label for="' + id + '">' + field.name + '</label>'
          + '<textarea id="' + id + '" name="item[' + name + ']">' + value + '</textarea>';
   case 'date':
@@ -134,7 +134,7 @@ STATIC.renderFormField = function (field, value) {
   case 'location':
     return '<label>' + field.name + '</label>'
          + '<div id="map" style="height:200px;"></div><script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script><script>google.maps.event.addDomListener(window, "load", function () {setMap(' + (field.value ? '{lat: ' + field.value.lat + ', lng: ' + field.value.lng + '}' : '') + ')});</script>';
-  case 'multiple_choice':
+  case 'multipleChoice':
     var options = field.options.reduce(function (memo, el) {
           return memo + '<option value="' + el + '">' + el + '</option>';
         }, '');
@@ -143,7 +143,7 @@ STATIC.renderFormField = function (field, value) {
            + '<option value="">Select one or more</option>'
            + options
          + '</select>';
-  case 'single_choice':
+  case 'singleChoice':
     var options = field.options.reduce(function (memo, el) {
           return memo + '<option value="' + el + '">' + el + '</option>';
         }, '');
@@ -185,7 +185,7 @@ STATIC.renderFilters = function (fields, data) {
   data = data || {};
 
   fields = fields.filter(function (field) {
-    return ['short_text', 'rich_text'].indexOf(field.type) === -1;
+    return ['shortText', 'richText'].indexOf(field.type) === -1;
   });
 
   html = '<form id="filters"><div id="full_text">';

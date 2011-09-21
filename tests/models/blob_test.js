@@ -8,7 +8,7 @@ var testosterone = require('testosterone')({ sync: true
     // mocks
   , noop = function () {}
   , models = {}
-  , db = {blobs: {findOne: noop}, items: {}}
+  , db = {blobs: {findOne: noop, findAndModify: noop}, items: noop}
   , Blob
   , APP;
 
@@ -71,11 +71,11 @@ testosterone
     , ['map', 'gallery']
     );
     assert.deepEqual(
-      Blob.getAvailableViews({types: [{type: 'short_text'}]})
+      Blob.getAvailableViews({types: [{type: 'shortText'}]})
     , ['grid', 'tabular']
     );
     assert.deepEqual(
-      Blob.getAvailableViews({types: [{type: 'short_text'}, {type: 'location'}, {type: 'picture'}]})
+      Blob.getAvailableViews({types: [{type: 'shortText'}, {type: 'location'}, {type: 'picture'}]})
     , ['map', 'grid', 'gallery', 'tabular']
     );
   })
@@ -164,7 +164,7 @@ testosterone
   .add('`update` updates a blob to the database', function () {
     var blobId = 42
       , now = Date.now()
-      , update = {zemba: 'fleiba', updatedAt: now}
+      , update = {view: 'grid', updatedAt: now}
       , blob = {foo: 'bar'}
       , callback;
 
@@ -175,22 +175,12 @@ testosterone
     Blob.update(blobId, null, callback);
 
     // malformed update
-    gently.expect(Blob, 'validate', function (_update, _required) {
-      assert.deepEqual(_update, update);
-      assert.deepEqual(_required, Blob.required);
-      return false;
-    });
     callback = gently.expect(function (error) {
       assert.equal(error[0], 400);
     });
-    Blob.update(blobId, update, callback);
+    Blob.update(blobId, {foo: 'bar'}, callback);
 
     // error
-    gently.expect(Blob, 'validate', function (_update, _required) {
-      assert.deepEqual(_update, update);
-      assert.deepEqual(_required, Blob.required);
-      return true;
-    });
     gently.expect(Blob, 'now', function () {
       return now;
     });
@@ -204,11 +194,6 @@ testosterone
     Blob.update(blobId, update, callback);
 
     // no blob
-    gently.expect(Blob, 'validate', function (_update, _required) {
-      assert.deepEqual(_update, update);
-      assert.deepEqual(_required, Blob.required);
-      return true;
-    });
     gently.expect(Blob, 'now', function () {
       return now;
     });
@@ -222,11 +207,6 @@ testosterone
     Blob.update(blobId, update, callback);
 
     // error on update
-    gently.expect(Blob, 'validate', function (_update, _required) {
-      assert.deepEqual(_update, update);
-      assert.deepEqual(_required, Blob.required);
-      return true;
-    });
     gently.expect(Blob, 'now', function () {
       return now;
     });
@@ -234,9 +214,10 @@ testosterone
       assert.equal(_blobId, blobId);
       _cb(null, blob);
     });
-    gently.expect(APP.db.blobs, 'update', function (_query, _update, _cb) {
-      assert.deepEqual(_query, {id: blobId});
-      assert.deepEqual(_update, {$set: update});
+    gently.expect(APP.db.blobs, 'findAndModify', function (_query, _cb) {
+      assert.deepEqual(_query.query, {id: blobId});
+      assert.deepEqual(_query.update, {$set: update});
+      assert.ok(_query['new']);
       _cb(Error('Fuuuuuuuu'));
     });
     callback = gently.expect(function (error) {
@@ -245,11 +226,6 @@ testosterone
     Blob.update(blobId, update, callback);
 
     // Ok
-    gently.expect(Blob, 'validate', function (_update, _required) {
-      assert.deepEqual(_update, update);
-      assert.deepEqual(_required, Blob.required);
-      return true;
-    });
     gently.expect(Blob, 'now', function () {
       return now;
     });
@@ -257,10 +233,11 @@ testosterone
       assert.equal(_blobId, blobId);
       _cb(null, blob);
     });
-    gently.expect(APP.db.blobs, 'update', function (_query, _update, _cb) {
-      assert.deepEqual(_query, {id: blobId});
-      assert.deepEqual(_update, {$set: update});
-      _cb(null);
+    gently.expect(APP.db.blobs, 'findAndModify', function (_query, _cb) {
+      assert.deepEqual(_query.query, {id: blobId});
+      assert.deepEqual(_query.update, {$set: update});
+      assert.ok(_query['new']);
+      _cb(null, blob);
     });
     callback = gently.expect(function (error, _blob) {
       assert.ifError(error);

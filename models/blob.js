@@ -3,9 +3,9 @@ var BLOB = Object.create(require('./model'))
   , common = require('common');
 
 BLOB.mapping = { map: ['location']
-               , grid: ['short_text', 'rich_text', 'date', 'duration', 'number', 'multiple_choice', 'single_choice']
+               , grid: ['shortText', 'richText', 'date', 'duration', 'number', 'multipleChoice', 'singleChoice']
                , gallery: ['picture']
-               , tabular: ['short_text', 'date', 'duration', 'number', 'multiple_choice', 'single_choice', 'link']
+               , tabular: ['shortText', 'date', 'duration', 'number', 'multipleChoice', 'singleChoice', 'link']
                };
 
 BLOB.required = {name: 1, itemName: 1, types: 1};
@@ -83,11 +83,11 @@ BLOB.create = function (blob, callback) {
  * @param {Function} callback
  */
 BLOB.update = function (blobId, update, callback) {
-  if (!update || !BLOB.validate(update, BLOB.required)) {
+  if (!update || !update.view) {
     return callback([400, Error('Missing or malformed blob update')]);
   }
 
-  update = common.join(update, {updatedAt: BLOB.now()});
+  update = common.join({view: update.view}, {updatedAt: BLOB.now()});
 
   common.step([
     function (next) {
@@ -98,13 +98,7 @@ BLOB.update = function (blobId, update, callback) {
         return callback([404, Error('Blob not found')]);
       }
 
-      APP.db.blobs.update({id: blobId}, {$set: update}, function (error) {
-        if (error) {
-          callback(error);
-        } else {
-          callback(null, blob);
-        }
-      });
+      APP.db.blobs.findAndModify({query: {id: blobId}, update: {$set: update}, 'new': true}, callback);
     }
   ], callback);
 };
