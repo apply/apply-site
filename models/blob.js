@@ -7,6 +7,7 @@ BLOB.mapping = { map: ['location']
                , gallery: ['picture']
                , tabular: ['short_text', 'date', 'duration', 'number', 'multiple_choice', 'single_choice', 'link']
                };
+
 BLOB.required = {name: 1, itemName: 1, types: 1};
 
 /**
@@ -68,6 +69,7 @@ BLOB.create = function (blob, callback) {
     if (error) {
       callback(error);
     } else {
+      delete blob._id;
       callback(null, blob);
     }
   });

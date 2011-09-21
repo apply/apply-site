@@ -35,17 +35,17 @@ function render(location, locals) {
 
 function renderView(location, locals) {
   return function(request, response) {
-  		// consoel.log query string
-  		
-		var query = url.parse(request.url, true).query;
-		var qs = '?' + querystring.stringify(query);
+      // consoel.log query string
+      
+    var query = url.parse(request.url, true).query;
+    var qs = '?' + querystring.stringify(query);
 
-		common.step([
-			function(next) {
-				curly.get(host + '/api/blobs/{blob}', request.params).json(next.parallel());
-				curly.get(host + '/api/blobs/{blob}/items' + qs, request.params).json(next.parallel());
-			},
-			function(result) {
+    common.step([
+      function(next) {
+        curly.get(host + '/api/blobs/{blob}', request.params).json(next.parallel());
+        curly.get(host + '/api/blobs/{blob}/items' + qs, request.params).json(next.parallel());
+      },
+      function(result) {
         locals = common.join(locals, {items: result[1], blob: result[0]}) || {};
 
         if (!locals.css && result[0].view) {
@@ -58,49 +58,49 @@ function renderView(location, locals) {
           locals.js.push('blobs/' + result[0].view);
         }
 
-				render(location, locals)(request, response);
-			}
-		], function(err) {
-			bark.jade('./views/404.jade')(request, response);	
-		});
-	}
+        render(location, locals)(request, response);
+      }
+    ], function(err) {
+      bark.jade('./views/404.jade')(request, response); 
+    });
+  }
 };
 
 function renderItem(location, locals) {
-	return function(request, response) {
+  return function(request, response) {
     var item;
-		common.step([
-			function(next) {
-				curly.get(host + '/api/items/{item}', request.params).json(next);
-			},
-			function(_item, next) {
+    common.step([
+      function(next) {
+        curly.get(host + '/api/items/{item}', request.params).json(next);
+      },
+      function(_item, next) {
         item = _item;
-				curly.get(host + '/api/blobs/{blob}', {blob: item.blobid}).json(next);
-			},
-			function(blob) {
+        curly.get(host + '/api/blobs/{blob}', {blob: item.blobid}).json(next);
+      },
+      function(blob) {
         locals = common.join(locals, {item: item, blob: blob}) || {};
-				render(location, locals)(request, response);
-			}
-		], function(err) {
-			bark.jade('./jade/404.jade')(request, response);
-		});
-	}
+        render(location, locals)(request, response);
+      }
+    ], function(err) {
+      bark.jade('./jade/404.jade')(request, response);
+    });
+  }
 }
 
 function renderCreateItem(location, locals) {
   return function(request, response) {
-		common.step([
-			function(next) {
-				curly.get(host + '/api/blobs/{blob}', request.params).json(next);
-			},
-			function(blob) {
+    common.step([
+      function(next) {
+        curly.get(host + '/api/blobs/{blob}', request.params).json(next);
+      },
+      function(blob) {
         locals = common.join(locals, {blob: blob}) || {};
-				render(location, locals)(request, response);
-			}
-		], function(err) {
-			bark.jade('./views/404.jade')(request, response);	
-		});
-	}
+        render(location, locals)(request, response);
+      }
+    ], function(err) {
+      bark.jade('./views/404.jade')(request, response); 
+    });
+  }
 };
 
 server.get('/', render('./views/index.jade', {css: ['index']}));
@@ -110,41 +110,41 @@ server.get('/blobs/create', render('./views/blobs/create.jade',{types: types, cs
 
 // select view
 server.get('/blobs/{blob}/view', function(request, response) {
-	common.step([
-		function(next) {
-			curly.get(host+'/api/blobs/{blob}', request.params).json(next);
-		},
-		function(blob) {
-			render('./views/blobs/view.jade', {css: ['blobs/view'], js:['blobs/view'], blob:blob})(request, response);
-		}
-	], function(err) {		
-		bark.jade('./jade/404.jade')(request, response);
-	})
+  common.step([
+    function(next) {
+      curly.get(host+'/api/blobs/{blob}', request.params).json(next);
+    },
+    function(blob) {
+      render('./views/blobs/view.jade', {css: ['blobs/view'], js:['blobs/view'], blob:blob})(request, response);
+    }
+  ], function(err) {    
+    bark.jade('./jade/404.jade')(request, response);
+  })
 });
 
 // blob view
 server.get('/blobs/{blob}', function(request, response) {
-	common.step([
-		function(next) {
-			curly.get(host + '/api/blobs/{blob}/view', request.params).json(next);
-		},
-		function(blob) {
-			if (!blob) {
-				response.writeHead(404);
-				response.end();
-				return;
-			}
-			if(blob.view) {
-				renderView('./views/blobs/' + blob.view + '.jade')(request, response);	
-				return;
-			}
-			request.url = common.format('/blobs/{blob}/view',request.params);
-//			renderView('./views/blobs/' + blob.view + '.jade')(request, response);
-			server.route(request, response);
-		}
-	], function(err) {
-		bark.jade('./jade/404.jade')(request, response);
-	});
+  common.step([
+    function(next) {
+      curly.get(host + '/api/blobs/{blob}/view', request.params).json(next);
+    },
+    function(blob) {
+      if (!blob) {
+        response.writeHead(404);
+        response.end();
+        return;
+      }
+      if(blob.view) {
+        renderView('./views/blobs/' + blob.view + '.jade')(request, response);  
+        return;
+      }
+      request.url = common.format('/blobs/{blob}/view',request.params);
+//      renderView('./views/blobs/' + blob.view + '.jade')(request, response);
+      server.route(request, response);
+    }
+  ], function(err) {
+    bark.jade('./jade/404.jade')(request, response);
+  });
 });
 
 server.get('/blobs/{blob}/grid', renderView('./views/blobs/grid.jade', {css: ['blobs/grid']}));
@@ -158,57 +158,56 @@ server.get('/items/{item}', renderItem('./views/blobs/items/show.jade', {css: ['
 server.get('/items/{item}/edit', renderItem('./views/blobs/items/edit.jade', {css: ['vendor/jquery-ui'], js: ['items/edit']}));
 
 server.post('/tojson', function(request, response) { //hacky! to help the client side send json
-	common.step([
-		function(next) {
-			buffoon.string(request, next);
-		},
-		function(str) {
-			str = querystring.parse(str);
+  common.step([
+    function(next) {
+      buffoon.string(request, next);
+    },
+    function(str) {
+      str = querystring.parse(str);
 
-			var result = [];
+      var result = [];
 
-			for (var i in str) {
-				var item = {};
+      for (var i in str) {
+        var item = {};
 
         item.name = i.match(/\[([^\]]+)\]/)[1];
-				item.value = str[i];
+        item.value = str[i];
 
-				result.push(item);
-			}
+        result.push(item);
+      }
 
-			response.writeHead(200, {'content-type':'application/json'});
-			response.end(JSON.stringify(result));
-		}
-	], function(err) {
-		response.writeHead(500);
-		response.end();
-	});
+      response.writeHead(200, {'content-type':'application/json'});
+      response.end(JSON.stringify(result));
+    }
+  ], function(err) {
+    response.writeHead(500);
+    response.end();
+  });
 });
 
 api.listen(server);
 
 if (process.argv[2]) {
-	var net = require('net');
-	
-	net.createServer(function(sock) {
-		sock.pause();
+  var net = require('net');
+  
+  net.createServer(function(sock) {
+    sock.pause();
 
-		var cli = net.createConnection(process.argv[2]);
+    var cli = net.createConnection(process.argv[2]);
 
-		cli.on('connect', function() {
-			sock.resume();
-			sock.pipe(cli);
-			cli.pipe(sock);
-		});
+    cli.on('connect', function() {
+      sock.resume();
+      sock.pipe(cli);
+      cli.pipe(sock);
+    });
 
-	}).listen(8888);
+  }).listen(8888);
 
-	server.listen(process.argv[2]);
+  server.listen(process.argv[2]);
 } else {
-	server.listen(8888);
-	
+  server.listen(8888);
 }
 
 process.on('uncaughtException', function(err) {
-	console.error(err.stack);
+  console.error(err.stack);
 })

@@ -2,7 +2,7 @@ var jsonize = require('jsonize')
   , common = require('common')
   , curly = require('curly')
   , dir = require('./dir')
-  , env = process.env.NODE_ENV
+  , env = process.env.NODE_ENV || 'development'
   , config = require(dir.config)[env]
   , db = require('mongojs').connect(config.mongo.connection, config.mongo.collections)
   , APP;
@@ -12,7 +12,7 @@ APP = {
 , config: config
 , env: env
 , model: function (str) {
-    return require(config.models + '/' + str);
+    return require(dir.models + '/' + str);
   }
 };
 
@@ -42,7 +42,7 @@ function callbackify(respond) {
   };
 }
 
-module.exports.listen = function (server) {
+module.exports.use = function (server) {
 
   /**
    * /api/blobs
